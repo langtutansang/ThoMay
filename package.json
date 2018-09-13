@@ -4,20 +4,36 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "android-dev": "adb reverse tcp:8081 tcp:8081 && react-native run-android",
+    "chay": "react-native run-android",
     "test": "jest"
   },
   "dependencies": {
+    "appcenter": "^1.8.1",
+    "appcenter-analytics": "^1.8.1",
+    "appcenter-crashes": "^1.8.1",
+    "moment": "^2.22.2",
     "react": "16.4.1",
-    "react-native": "0.55.2"
+    "react-native": "0.55.2",
+    "react-native-code-push": "^5.4.2",
+    "react-native-permissions": "^1.1.1",
+    "react-native-router-flux": "^4.0.1",
+    "react-redux": "^5.0.7",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",
     "babel-preset-react-native": "4",
     "jest": "23.6.0",
-    "react-test-renderer": "16.4.1"
+    "react-test-renderer": "16.4.1",
+    "remote-redux-devtools": "^0.5.13"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFiles": [
+      "<rootDir>\\node_modules\\appcenter\\test\\AppCenterMock.js",
+      "<rootDir>\\node_modules\\appcenter-analytics\\test\\AppCenterAnalyticsMock.js",
+      "<rootDir>\\node_modules\\appcenter-crashes\\test\\AppCenterCrashesMock.js"
+    ]
   }
 }
