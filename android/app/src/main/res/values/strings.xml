@@ -1,5 +1,5 @@
 <resources>
-    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">e419f32b-bf3c-42e8-a422-8e758bfb7ef4</string>
+    <string moduleConfig="true" name="reactNativeCodePush_androidDeploymentKey">1Fz-5JWwmTP4Z_mvTVGxfLU3wgll3edf9ff5-930a-438f-b75d-eea710594d34</string>
     <string name="app_name">ThoMay</string>
     <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">ALWAYS_SEND</string>
     <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">ALWAYS_SEND</string>

@@ -1,18 +1,30 @@
 import React, {Component} from 'react';
 import codePush from 'react-native-code-push';
-import { View, Text } from 'react-native';
+import scenes from '@scenes';
+import {Router} from 'react-native-router-flux';
+import { Provider } from 'react-redux';
+
+import configureStore from './store/configureStore';
 
 class App extends Component {
-  constructor(){
-    super()
-    codePush.sync({
-      updateDialog: true,
-      installMode: codePush.InstallMode.IMMEDIATE
-    });
-  }
   render() {
+    const getSceneStyle = () => ({
+      flex: 1,
+      backgroundColor: '#fff',
+      shadowColor: 'black',
+      shadowOffset: {
+        width: 2,
+        height: 4
+      },
+      shadowOpacity: 0.5,
+      shadowRadius: 3
+    });
+
+    const store = configureStore();
     return (
-        <Text>thử update</Text>
+      <Provider store={store}>
+        <Router scenes={scenes}  getSceneStyle={getSceneStyle}/>
+      </Provider>
     );
   }
 }
