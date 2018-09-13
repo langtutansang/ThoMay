@@ -3,9 +3,16 @@ import codePush from 'react-native-code-push';
 import { View, Text } from 'react-native';
 
 class App extends Component {
+  constructor(){
+    super()
+    codePush.sync({
+      updateDialog: true,
+      installMode: codePush.InstallMode.IMMEDIATE
+    });
+  }
   render() {
     return (
-        <Text>langtutasnagn</Text>
+        <Text>thử update</Text>
     );
   }
 }
