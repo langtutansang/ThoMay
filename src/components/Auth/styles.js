@@ -10,6 +10,13 @@ export default StyleSheet.create({
     width: "100%",
     position:"relative"
   },
+  indicator:{
+    flex: 1,
+    justifyContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10
+  },
   img: {
     alignSelf: 'center',
     width: logoWidth,

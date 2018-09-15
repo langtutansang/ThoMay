@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import codePush from 'react-native-code-push';
+// import codePush from 'react-native-code-push';
 import scenes from '@scenes';
 import {Router} from 'react-native-router-flux';
 import { Provider } from 'react-redux';
@@ -29,4 +29,5 @@ class App extends Component {
   }
 }
 
-export default codePush(App);
+// export default codePush(App);
+export default (App);

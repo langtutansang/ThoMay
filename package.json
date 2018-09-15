@@ -11,6 +11,7 @@
     "appcenter": "^1.8.1",
     "appcenter-analytics": "^1.8.1",
     "appcenter-crashes": "^1.8.1",
+    "firebase": "^5.5.0",
     "i": "^0.3.6",
     "moment": "^2.22.2",
     "npm": "^6.4.1",
