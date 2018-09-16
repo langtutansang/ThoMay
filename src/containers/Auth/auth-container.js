@@ -5,7 +5,8 @@ import { AuthContent, Login } from '@components/Auth'
 import Background from '@components/Background'
 
 import styles from './styles'
-import firebase from '@components/Firebase'
+import firebase from 'react-native-firebase';
+
 class Auth extends Component{
   state = {
     loading: true

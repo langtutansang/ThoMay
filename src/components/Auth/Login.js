@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import firebase from '@components/Firebase'
+// import firebase from '@components/Firebase'
+import firebase from 'react-native-firebase';
+
 import * as Animatable from 'react-native-animatable';
 
 import Divider from '@components/Divider'
@@ -13,7 +15,8 @@ class Auth extends Component {
   state = {
     email: "admin@gmail.com",
     password: "admin123",
-    isLogin: false
+    isLogin: false,
+    isLoginAnonymous: false
   }
 
   login = () => {
@@ -21,7 +24,7 @@ class Auth extends Component {
     let self = this;
 
     self.setState({ isLogin: true })
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){
         self.setState({ isLogin: false })
       })
@@ -35,9 +38,25 @@ class Auth extends Component {
 
       });
   }
+  loginAnonymous = () =>{
+    let self = this;
 
+    self.setState({ isLoginAnonymous: true })
+    firebase.auth().signInAnonymouslyAndRetrieveData()
+    .then(function(){
+      self.setState({ isLoginAnonymous: false })
+    })
+    .catch(function(error){
+      ToastAndroid.showWithGravity(
+        error.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER
+      );
+      self.setState({ isLoginAnonymous: false })
+    })
+  }
   render() {
-    let { isLogin }  = this.state;
+    let { isLogin, isLoginAnonymous }  = this.state;
 
     return (
       <View pointerEvents={ isLogin ? "none" : "auto"}>
@@ -64,7 +83,7 @@ class Auth extends Component {
         </View>
         <View style={styles.formButton}>
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.login}>
-            <Text style={styles.loginText}>{ isLogin ? <Icon name="spinner" style={styles.icon} size={20} /> : null} { isLogin ?" Đang đăng nhập" : "Đăng nhập"}</Text>
+            <Text style={styles.loginText}>{ isLogin ? <Icon name="spinner" style={styles.icon} size={20} /> : null} { isLogin ? " Đang đăng nhập" : "Đăng nhập"}</Text>
           </TouchableHighlight>
         </View>
         <View style={styles.touchableOpacity}>
@@ -94,8 +113,8 @@ class Auth extends Component {
         </View>
         <View style={styles.formButton}>
           <View style={styles.divider}>
-            <TouchableHighlight style={[styles.buttonContainer, styles.loginButton, styles.ignoreLogin]} onPress={() => Actions.login()}>
-              <Text style={styles.loginText}>Bỏ qua đăng nhập</Text>
+            <TouchableHighlight style={[styles.buttonContainer, styles.loginButton, styles.ignoreLogin]} onPress={this.loginAnonymous}>
+              <Text style={styles.loginText}>{ isLoginAnonymous ? <Icon name="spinner" style={styles.icon} size={20} /> : null} { isLoginAnonymous ?" Đang đăng nhập" : "Bỏ qua đăng nhập"}</Text>
             </TouchableHighlight>
           </View>
         </View>

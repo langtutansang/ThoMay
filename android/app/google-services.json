@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "481151272021",
+    "firebase_url": "https://thomay-6086b.firebaseio.com",
+    "project_id": "thomay-6086b",
+    "storage_bucket": "thomay-6086b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481151272021:android:bd9cd8d419f714f6",
+        "android_client_info": {
+          "package_name": "com.thomay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481151272021-m36g07817ge9igb5jq82bm1dvrbltrh2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxvcaiSXVPM3Iq36lH_cnQYDrlEeehW1c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
