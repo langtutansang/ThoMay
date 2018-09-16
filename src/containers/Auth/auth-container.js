@@ -1,26 +1,45 @@
-import {connect} from 'react-redux';
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, ActivityIndicator } from 'react-native';
+import { Actions } from 'react-native-router-flux';
+import { AuthContent, Login } from '@components/Auth'
+import Background from '@components/Background'
 
-const mapDispatchToProps = (dispatch) => {
-
-  return {
-    dispatch,
-    // loginAction: (loginInfo) => dispatch(login(loginInfo)),
-  };
-};
-
-const mapStateToProps = ({auth}) => {
-  return ({
-    auth
-  });
-};
+import styles from './styles'
+import firebase from '@components/Firebase'
 class Auth extends Component{
+  state = {
+    loading: true
+  }
 
+  componentDidMount() {
+    let self = this;
+    firebase.auth().onAuthStateChanged(function (user) {
+      if (user) {
+        var displayName = user.displayName;
+        var email = user.email;
+        var emailVerified = user.emailVerified;
+        var photoURL = user.photoURL;
+        var isAnonymous = user.isAnonymous;
+        var uid = user.uid;
+        var providerData = user.providerData;
+        Actions.home();
+      } else {      
+        self.setState({ loading: false })
+      }
+    });
+  }
   render(){
-    let Child = this.props.selector
-    return <Child/>    
+    let { loading } = this.state
+    return(
+      <Background>
+        { loading ?
+          <View style={styles.indicator}><ActivityIndicator size="large" color="#0000ff" /></View>  : 
+          <AuthContent>
+            <Login/>
+          </AuthContent> 
+        }
+      </Background> )
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default Auth;

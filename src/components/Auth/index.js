@@ -1,2 +1,2 @@
-export { default as Auth } from './Auth'
+export { default as AuthContent } from './AuthContent'
 export { default as Login } from './Login'

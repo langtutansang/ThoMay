@@ -3,6 +3,7 @@ import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndro
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from '@components/Firebase'
+import * as Animatable from 'react-native-animatable';
 
 import Divider from '@components/Divider'
 
@@ -10,8 +11,8 @@ import styles from './styles';
 
 class Auth extends Component {
   state = {
-    email: "",
-    password: "",
+    email: "admin@gmail.com",
+    password: "admin123",
     isLogin: false
   }
 
@@ -21,6 +22,9 @@ class Auth extends Component {
 
     self.setState({ isLogin: true })
     firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(function(){
+        self.setState({ isLogin: false })
+      })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
           error.message,
@@ -34,10 +38,11 @@ class Auth extends Component {
 
   render() {
     let { isLogin }  = this.state;
+
     return (
       <View pointerEvents={ isLogin ? "none" : "auto"}>
         <View style={styles.formInput}>
-          <Icon name="phone" style={styles.icon} size={20} />
+          <Icon name="envelope" style={styles.icon} size={20} />
           <TextInput
             placeholder="Email"
             onChangeText={(text) => this.setState({ email: text })}
@@ -59,7 +64,7 @@ class Auth extends Component {
         </View>
         <View style={styles.formButton}>
           <TouchableHighlight style={[styles.buttonContainer, styles.loginButton]} onPress={this.login}>
-            <Text style={styles.loginText}>{ isLogin ? "Đang đăng nhập" : "Đăng nhập"}</Text>
+            <Text style={styles.loginText}>{ isLogin ? <Icon name="spinner" style={styles.icon} size={20} /> : null} { isLogin ?" Đang đăng nhập" : "Đăng nhập"}</Text>
           </TouchableHighlight>
         </View>
         <View style={styles.touchableOpacity}>

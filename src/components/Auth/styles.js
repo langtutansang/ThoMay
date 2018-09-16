@@ -3,13 +3,6 @@ import {StyleSheet, Dimensions} from 'react-native';
 const {width, height} = Dimensions.get('window');
 let [logoWidth, logoHeight] = [width *0.8, height * 0.45];
 export default StyleSheet.create({
-  main: {
-    display: 'flex',
-    alignItems: 'center',
-    height: "100%",
-    width: "100%",
-    position:"relative"
-  },
   indicator:{
     flex: 1,
     justifyContent: 'center',

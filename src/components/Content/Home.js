@@ -8,7 +8,7 @@ class Home extends Component {
   logout = () => {
     firebase.auth().signOut().then(
       ()=>{
-        Actions.auth();
+        Actions.login();
       }
     );
     
