@@ -1,46 +1,23 @@
 import React, { Component } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Button } from 'react-native';
 import { Actions } from 'react-native-router-flux';
-import { AuthContent, Login } from '@components/Auth'
 import Background from '@components/Background'
 
-import styles from './styles'
 import firebase from 'react-native-firebase';
+import styles from './styles';
 
-class Auth extends Component{
-  state = {
-    loading: true
-  }
+class AuthContainer extends Component {
 
   componentDidMount() {
-    let self = this;
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        var displayName = user.displayName;
-        var email = user.email;
-        var emailVerified = user.emailVerified;
-        var photoURL = user.photoURL;
-        var isAnonymous = user.isAnonymous;
-        var uid = user.uid;
-        var providerData = user.providerData;
-        Actions.home();
-      } else {      
-        self.setState({ loading: false })
-      }
-    });
+   
   }
-  render(){
-    let { loading } = this.state
-    return(
+  render() {
+
+    return (
       <Background>
-        { loading ?
-          <View style={styles.indicator}><ActivityIndicator size="large" color="#0000ff" /></View>  : 
-          <AuthContent>
-            <Login/>
-          </AuthContent> 
-        }
-      </Background> )
+        <View style={styles.indicator}><ActivityIndicator size="large" color="#0000ff" /></View>
+      </Background>)
   }
 }
 
-export default Auth;
+export default AuthContainer;

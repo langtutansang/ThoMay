@@ -24,6 +24,7 @@ class Auth extends Component {
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){
         self.setState({ isLogin: false })
+        Actions.home();
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
@@ -32,9 +33,9 @@ class Auth extends Component {
           ToastAndroid.CENTER
         );
         self.setState({ isLogin: false })
-
       });
   }
+
   loginAnonymous = () =>{
     let self = this;
 
