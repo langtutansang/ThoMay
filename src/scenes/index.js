@@ -1,12 +1,16 @@
 import React from 'react';
 import {Actions, Scene} from 'react-native-router-flux';
 import  Auth from '@containers/Auth/auth-container'
+import  RegisterContainer from '@containers/Auth/register-container'
+import  ForgotPasswordContainer from '@containers/Auth/forgot-password-container'
 import { Home } from '@components/Content'
-  
+
 const scenes = Actions.create(
   <Scene key='app'  hideNavBar>
     <Scene key='login' component={ Auth } title='Auth'/>
     <Scene key='home' component={ Home }  title='Home'/>
+    <Scene key='register' component={ RegisterContainer }  title='Register'/>
+    <Scene key='forgotPassword' component={ ForgotPasswordContainer }  title='ForgotPassword'/>
   </Scene>
 );
 

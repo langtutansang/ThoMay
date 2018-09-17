@@ -2,10 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-// import firebase from '@components/Firebase'
 import firebase from 'react-native-firebase';
-
-import * as Animatable from 'react-native-animatable';
 
 import Divider from '@components/Divider'
 
@@ -13,8 +10,8 @@ import styles from './styles';
 
 class Auth extends Component {
   state = {
-    email: "admin@gmail.com",
-    password: "admin123",
+    email: "langtutansang@gmail.com",
+    password: "Ltts11021996",
     isLogin: false,
     isLoginAnonymous: false
   }
@@ -89,14 +86,14 @@ class Auth extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={this.login}>
+            onPress={() => Actions.register()}>
             <Text>
               {'Đăng ký'}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => { }}>
+            onPress={() => Actions.forgotPassword()}>
             <Text>
               {'Quên mật khẩu ?'}
             </Text>

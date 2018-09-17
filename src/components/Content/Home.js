@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import firebase from '@components/Firebase'
 import { Actions } from 'react-native-router-flux';
-
+import firebase from 'react-native-firebase';
 
 class Home extends Component {
   logout = () => {
