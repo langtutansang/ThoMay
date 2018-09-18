@@ -7,12 +7,16 @@ import firebase from 'react-native-firebase';
 import styles from './styles';
 
 class AuthContainer extends Component {
-
-  componentDidMount() {
-   
+  unsubscriber = null;
+  componentDidMount(){
+    this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
+      if (!user) Actions.login({type: 'reset'});
+      if (user) Actions.home({type: 'reset'});
+      this.unsubscriber();
+    });
   }
-  render() {
 
+  render() {
     return (
       <Background>
         <View style={styles.indicator}><ActivityIndicator size="large" color="#0000ff" /></View>

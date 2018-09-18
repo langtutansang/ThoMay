@@ -22,9 +22,9 @@ class Auth extends Component {
 
     self.setState({ isLogin: true })
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
-      .then(function(){
-        self.setState({ isLogin: false })
-        Actions.home();
+      .then(function(){   
+        self.setState({ isLogin: false }, () =>  Actions.home({type: 'reset'}))
+       
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
@@ -42,7 +42,7 @@ class Auth extends Component {
     self.setState({ isLoginAnonymous: true })
     firebase.auth().signInAnonymouslyAndRetrieveData()
     .then(function(){
-      self.setState({ isLoginAnonymous: false })
+      self.setState({ isLoginAnonymous: false },  () =>  Actions.home({type: 'reset'}))
     })
     .catch(function(error){
       ToastAndroid.showWithGravity(
@@ -53,6 +53,7 @@ class Auth extends Component {
       self.setState({ isLoginAnonymous: false })
     })
   }
+  
   render() {
     let { isLogin, isLoginAnonymous }  = this.state;
 

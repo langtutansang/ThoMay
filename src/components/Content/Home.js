@@ -6,15 +6,18 @@ import firebase from 'react-native-firebase';
 import Contacts from 'react-native-contacts';
 import { checkReadContact, requestReadContact} from '@components/Permission/contacts';
 class Home extends Component {
+  constructor() {
+    super();
+    this.ref = firebase.firestore().collection('contact');
+  }
+
   state = {
-    permission:{
-      read_contact: false
-    }
+    contacts:[]
   }
   logout = () => {
     firebase.auth().signOut().then(
       ()=>{
-        Actions.login();
+        Actions.login({type: 'reset'});
       }
     );
     
@@ -24,28 +27,42 @@ class Home extends Component {
     checkReadContact()
     .then(
       res => {
-        if(res)  this.setState({permission: {read_contact: res } }) 
+
+        if(res) this.getContact()
         else
           requestReadContact()
-            .then( res =>  this.setState({permission: {read_contact: res } }) )
+            .then( res =>  {
+              if(res) this.getContact()
+          })
             .catch(err => console.log(err))
       }
     )
     .catch(
       err => console.log(err)
     )
+  }
+  pushData =() =>{
+  
 
-    // Contacts.getAll((err, contacts) => {
-    //   if (err) throw err;
-    
-    //   // contacts matching "filter"
-    //   console.log(contacts)
-    // })
+      this.ref.add({
+        name: 'samg'
+      });
+  }
+  getContact = () => {
+
+    Contacts.getAll((err, contacts) => {
+
+      if (err) throw err;
+      console.log(contacts)
+     
+      this.setState({contacts})
+    })
   }
   render() {
+    let { contacts } =this.state
+    console.log(contacts)
     return (
       <View>
-        <Text>sang</Text>
         <TouchableOpacity
 
         onPress={this.logout}>
@@ -53,7 +70,16 @@ class Home extends Component {
           Đăng xuất
         </Text>
         </TouchableOpacity>
+        <TouchableOpacity
 
+        onPress={this.pushData}>
+        <Text>
+          push dataa
+        </Text>
+        </TouchableOpacity>
+        { contacts.map( (e,key) =>(
+          <Text key={key}>{e.givenName}</Text>
+        )) }
       </View>
     )
   }
