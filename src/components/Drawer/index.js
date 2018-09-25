@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Drawer, Title } from 'native-base';
+import React from 'react';
+import { Drawer } from 'native-base';
 import Sidebar from './Sidebar'
 class DrawerComponent extends React.Component {
 
@@ -12,7 +12,7 @@ class DrawerComponent extends React.Component {
   render() {
     return (
       <Drawer
-        
+        open
         tapToClose
         ref={(ref) => { this.drawer = ref; }}
         content={<Sidebar/>}
