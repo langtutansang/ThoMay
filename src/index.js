@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 // import codePush from 'react-native-code-push';
-import { connect } from 'react-redux'
 import scenes from '@scenes';
 import {Router} from 'react-native-router-flux';
 import { Provider } from 'react-redux';
@@ -53,19 +52,15 @@ class App extends Component {
     const store =configureStore();
     return (
       <StyleProvider style={getTheme(material)}>
-        <Drawer>
-          <Provider store={store}>
-              <Router scenes={scenes}/>
-          </Provider>
-        </Drawer>
+        <Provider store={store}>
+          <Drawer>
+            <Router scenes={scenes}/>
+          </Drawer>
+        </Provider>
       </StyleProvider>
     );
   }
 }
-function mapStateToProps ({ drawer }) {
-  return {
-    drawer
-  }
-}
+
 // export default codePush(App);
-export default  connect(mapStateToProps)(App);
+export default (App);

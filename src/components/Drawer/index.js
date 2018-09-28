@@ -1,27 +1,30 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { Drawer } from 'native-base';
 import Sidebar from './Sidebar'
 class DrawerComponent extends React.Component {
 
-  closeDrawer = () => {
-    this.drawer._root.close()
-  };
-  openDrawer = () => {
-    this.drawer._root.open()
-  };
+  componentDidUpdate(){
+    if(this.props.drawer.isOpen) this.drawer._root.close()
+    else this.drawer._root.open()
+  }
   render() {
     return (
       <Drawer
-        open
         tapToClose
         ref={(ref) => { this.drawer = ref; }}
         content={<Sidebar/>}
-        onClose={() => this.closeDrawer()} >
+        onClose={this.closeDrawer} >
         {this.props.children}
       </Drawer>
     );
   }
 }
-export default DrawerComponent;
 
+function mapStateToProps ({ drawer }) {
+  return {
+    drawer
+  }
+}
+export default  connect(mapStateToProps)(DrawerComponent);
 

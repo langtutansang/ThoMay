@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import { Header, Left, Body, Right, Button, Icon, Title } from 'native-base';
-
+import { Header, Left, Body, Button, Icon, Title } from 'native-base';
+import { connect } from 'react-redux'
+import { drawerOpen } from '@actions/drawer'
 import { View } from 'react-native-animatable';
+import { bindActionCreators } from 'redux'
+
 class HeaderComponent extends Component {
 
   render() {
@@ -16,7 +19,7 @@ class HeaderComponent extends Component {
 
           <Button 
             transparent
-            onPress={this.openDrawer}
+            onPress={()=>this.props.openDrawer()}
           >
             <Icon name='menu' />
           </Button>
@@ -31,6 +34,12 @@ class HeaderComponent extends Component {
     );
   }
 }
-export default HeaderComponent;
+
+mapDispatchToProps = (dispatch) =>({
+  openDrawer: bindActionCreators(drawerOpen, dispatch),
+
+})
+
+export default  connect(null,mapDispatchToProps)(HeaderComponent);
 
 
