@@ -21,3 +21,6 @@
    - Đồng bộ dữ liệu
    - Chia sẻ kiểu đồ
 ```
+#code push
+code-push release-react MayDo android -d "Production" -m --des "code"
+appcenter codepush release-react -a langtutansang-gmail.com/MayDo -d Staging

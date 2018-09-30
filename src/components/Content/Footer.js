@@ -42,7 +42,7 @@ class FooterComponent extends Component {
               badge={e.badge !== 0 ? true : false} 
               vertical key={ key } 
               active={router === routeName ? true: false}
-              onPress={()=> Actions[router]('replace')}
+              onPress={()=> Actions[router]({type: 'replace'})}
               >
               {e.badge !== 0 && <Badge><Text>{badge}</Text></Badge>}
               <Icon active={router === routeName ? true: false} name={icon} />

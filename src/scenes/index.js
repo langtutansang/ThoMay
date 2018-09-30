@@ -14,7 +14,7 @@ const scenes = Actions.create(
       <Scene key='login' component={LoginContainer} title='Login' />
       <Scene key='register' component={RegisterContainer} title='Register' />
       <Scene key='forgotPassword' component={ForgotPasswordContainer} title='ForgotPassword' />
-      <Scene key="home" title="Home" component={ Content } contentChild={ Home }/>
+      <Scene key="home" title="Home" component={ Content } contentChild={ Home } />
       <Scene key="list" title="List" component={ Content } contentChild={ List }/>
   </Stack>
 
