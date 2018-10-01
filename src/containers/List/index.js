@@ -5,15 +5,11 @@ import {View, Container, Card, CardItem, Left, Thumbnail, Body, Text } from 'nat
 import { CATEGORY_CONTACTS } from '@constants/title'
 class List extends Component {
 
-  onPress = () => {
-   Actions.contacts({type: ActionConst.REPLACE })
-   Actions.refresh({ setBackButton: 'list' })
-  }
   render() {
      return (
       <View>
         <Card>
-          <CardItem button onPress={this.onPress}>
+          <CardItem button onPress={()=> Actions.contacts({type: ActionConst.REPLACE })}>
             <Left>
               <Thumbnail square source={require('@thumbnails/category/Contacts.png')} />
               <Body>
