@@ -9,9 +9,11 @@ class List extends Component {
 
   constructor(props) {
     super(props);
-    this.ref = firebase.firestore().collection('contact');
-    this.account = firebase.auth().currentUser;
+    let {uid} = firebase.auth().currentUser._user;
+
+    this.ref = firebase.firestore().collection('contacts');
     this.state = {
+      uid,
       dataContacts: []
     }
   }
@@ -22,7 +24,7 @@ class List extends Component {
   componentDidMount() {
 
     BackHandler.addEventListener('hardwareBackPress', this.setBack );
-    this.unsubscribe = this.ref.onSnapshot(this.onCollectionUpdate) 
+    this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate) 
 
   }
   onCollectionUpdate = ( querySnapshot ) => {
