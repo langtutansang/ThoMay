@@ -2,32 +2,34 @@ import React, { Component } from 'react';
 import { Actions } from 'react-native-router-flux';
 
 import { Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
+import { TITLE_HOME, TITLE_CATEGORY, TITLE_PRODUCT, TITLE_OTHER} from '@constants/title'
+
 class FooterComponent extends Component {
   render() {
     let { routeName } = this.props;
     let content = [{
-      name: "Bảng",
+      name: TITLE_HOME,
       icon: "home",
       badge: 0,
       router: 'home'
 
     },
     {
-      name: "Danh mục",
+      name: TITLE_CATEGORY,
       icon: "list",
       badge: 0,
       router: 'list'
 
     },
     {
-      name: "Sản phẩm",
+      name: TITLE_PRODUCT,
       icon: "grid",
       badge: 0,
       router: 'home'
 
     },
     {
-      name: "Khác",
+      name: TITLE_OTHER,
       icon: "md-cloud-circle",
       badge: 0,
       router: 'home'

@@ -16,13 +16,13 @@ class Home extends Component {
   //   contacts:[]
   // }
   
-  // logout = () => {
-  //   firebase.auth().signOut().then(
-  //     ()=>{
-  //       Actions.login({type: 'reset'});
-  //     }
-  //   );
-  // }
+  logout = () => {
+    firebase.auth().signOut().then(
+      ()=>{
+        Actions.login({type: 'reset'});
+      }
+    );
+  }
 
   // componentDidMount(){
   //   checkReadContact()
@@ -68,6 +68,13 @@ class Home extends Component {
         >
       
               <Text> Primary </Text>
+            </Button>
+            <Button 
+          info
+          onPress= {this.logout}
+        >
+      
+              <Text> Logout </Text>
             </Button>
       </View>
     )

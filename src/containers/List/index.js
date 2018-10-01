@@ -1,19 +1,29 @@
 import React, { Component } from 'react';
+import { Actions, ActionConst  } from 'react-native-router-flux';
 
-import { Button, Text, View } from 'native-base';
-
+import {View, Container, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
+import { CATEGORY_CONTACTS } from '@constants/title'
 class List extends Component {
 
+  onPress = () => {
+   Actions.contacts({type: ActionConst.REPLACE })
+   Actions.refresh({ setBackButton: 'list' })
+  }
   render() {
-
-    return (
+     return (
       <View>
-     
-        <Button info
+        <Card>
+          <CardItem button onPress={this.onPress}>
+            <Left>
+              <Thumbnail square source={require('@thumbnails/category/Contacts.png')} />
+              <Body>
+                <Text>{ CATEGORY_CONTACTS }</Text>
 
-        >
-              <Text> List </Text>
-            </Button>
+              </Body>
+            </Left>
+          </CardItem>
+        </Card>
+
       </View>
     )
   }

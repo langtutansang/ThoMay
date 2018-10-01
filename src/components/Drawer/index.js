@@ -26,5 +26,5 @@ function mapStateToProps ({ drawer }) {
     drawer
   }
 }
-export default  connect(mapStateToProps)(DrawerComponent);
 
+export default  connect(mapStateToProps)(DrawerComponent);

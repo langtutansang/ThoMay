@@ -25,7 +25,7 @@ class HeaderComponent extends Component {
           </Button>
         </Left>
         <Body>
-          <Title>Header</Title>
+          <Title>{this.props.title}</Title>
         </Body>
 
       </Header>
