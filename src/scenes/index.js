@@ -19,7 +19,7 @@ const scenes = Actions.create(
       <Scene key="home" title={ TITLE_HOME } component={ Content } contentChild={ Home } />
       <Scene key="list" title={ TITLE_CATEGORY } component={ Content } contentChild={ List }/>
       {/* list */}
-      <Scene key="contacts" title="Contacts" component={ Content }  contentChild={ Contacts }/>
+      <Scene key="contacts" title="Liên Hệ" component={ Content }  contentChild={ Contacts }/>
   </Stack>
 );
 
