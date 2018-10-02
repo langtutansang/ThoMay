@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import Divider from '@components/Divider'
@@ -87,14 +86,18 @@ class Register extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={() => Actions.login()}>
+            onPress={() => {}
+            //  Actions.login()
+             }>
             <Text>
               {'Đăng nhập'}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => Actions.forgotPassword()}>
+            onPress={() =>{}
+            //  Actions.forgotPassword()
+             }>
             <Text>
               {'Quên mật khẩu ?'}
             </Text>

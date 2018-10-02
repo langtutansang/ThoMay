@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Button, Text, View } from 'native-base';
-import { Actions } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 
 import Contacts from 'react-native-contacts';
@@ -19,7 +18,7 @@ class Home extends Component {
   logout = () => {
     firebase.auth().signOut().then(
       ()=>{
-        Actions.login({type: 'reset'});
+        // Actions.login({type: 'reset'});
       }
     );
   }

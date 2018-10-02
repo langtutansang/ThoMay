@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import Divider from '@components/Divider'
@@ -26,7 +25,7 @@ class ForgotPassword extends Component {
           ToastAndroid.CENTER
         );
         self.setState({ isForgot: false })
-        Actions.login()
+        // Actions.login()
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
@@ -61,14 +60,18 @@ class ForgotPassword extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={() => Actions.login()}>
+            onPress={() => {}
+            // Actions.login()
+            }>
             <Text>
               {'Đăng nhập'}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>  Actions.register()}>
+            onPress={() =>  {}
+            // Actions.register()
+          }>
             <Text>
               {'Đăng ký ?'}
             </Text>

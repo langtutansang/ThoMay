@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 // import codePush from 'react-native-code-push';
-import scenes from '@scenes';
-import {Router} from 'react-native-router-flux';
+import Scenes from '@scenes';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import Drawer from '@components/Drawer'
@@ -54,7 +53,7 @@ class App extends Component {
       <StyleProvider style={getTheme(material)}>
         <Provider store={store}>
           <Drawer>
-            <Router scenes={scenes}/>
+            <Scenes/>
           </Drawer>
         </Provider>
       </StyleProvider>

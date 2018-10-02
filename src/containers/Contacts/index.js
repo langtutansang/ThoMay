@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
-import { Actions, ActionConst } from 'react-native-router-flux';
 import firebase from 'react-native-firebase';
 import { View, Text, Button, Icon } from 'native-base';
 import PopupDialog from 'react-native-popup-dialog';
@@ -18,7 +17,7 @@ class List extends Component {
       uid,
       dataContacts: []
     }
-    if (!props.left || !props.right) Actions.contacts({ left: this.renderLeftHeader(), right: this.renderRightHeader() })
+    // if (!props.left || !props.right) Actions.contacts({ left: this.renderLeftHeader(), right: this.renderRightHeader() })
   }
   renderLeftHeader = () => {
     return (
@@ -71,7 +70,6 @@ class List extends Component {
 
   componentDidMount() {
     this.popupDialog.show();
-
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
     this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
 

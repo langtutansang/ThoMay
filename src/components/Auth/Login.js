@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
@@ -23,7 +22,9 @@ class Auth extends Component {
     self.setState({ isLogin: true })
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){   
-        self.setState({ isLogin: false }, () =>  Actions.home({type: 'reset'}))
+        self.setState({ isLogin: false }, 
+          // () =>  Actions.home({type: 'reset'})
+          )
        
       })
       .catch(function (error) {
@@ -42,7 +43,9 @@ class Auth extends Component {
     self.setState({ isLoginAnonymous: true })
     firebase.auth().signInAnonymouslyAndRetrieveData()
     .then(function(){
-      self.setState({ isLoginAnonymous: false },  () =>  Actions.home({type: 'reset'}))
+      self.setState({ isLoginAnonymous: false }, 
+        //  () =>  Actions.home({type: 'reset'})
+         )
     })
     .catch(function(error){
       ToastAndroid.showWithGravity(
@@ -88,14 +91,18 @@ class Auth extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={() => Actions.register()}>
+            onPress={() =>{}
+            //  Actions.register()
+             }>
             <Text>
               {'Đăng ký'}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => Actions.forgotPassword()}>
+            onPress={() => {}
+            //  Actions.forgotPassword()
+             }>
             <Text>
               {'Quên mật khẩu ?'}
             </Text>
