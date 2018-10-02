@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { StackActions, NavigationActions } from 'react-navigation';
 
 import { Button, Text, View } from 'native-base';
 import firebase from 'react-native-firebase';
@@ -6,57 +7,20 @@ import firebase from 'react-native-firebase';
 import Contacts from 'react-native-contacts';
 import { checkReadContact, requestReadContact} from '@components/Permission/contacts';
 class Home extends Component {
-  // constructor() {
-  //   super();
-  //   this.ref = firebase.firestore().collection('contact');
-  // }
-
-  // state = {
-  //   contacts:[]
-  // }
   
   logout = () => {
     firebase.auth().signOut().then(
       ()=>{
-        // Actions.login({type: 'reset'});
+        const loginAction = StackActions.reset({
+          index: 0,
+          actions: [NavigationActions.navigate({ routeName: 'login' })],
+        });
+        this.props.navigation.dispatch(loginAction);
+        
       }
     );
   }
 
-  // componentDidMount(){
-  //   checkReadContact()
-  //   .then(
-  //     res => {
-  //       if(res) this.getContact()
-  //       else
-  //         requestReadContact()
-  //           .then( res =>  {
-  //             if(res) this.getContact()
-  //         })
-  //           .catch(err => console.log(err))
-  //     }
-  //   )
-  //   .catch(
-  //     err => console.log(err)
-  //   )
-  // }
-  // pushData =() =>{
-  
-
-  //     this.ref.add({
-  //       name: 'samg'
-  //     });
-  // }
-  // getContact = () => {
-
-  //   Contacts.getAll((err, contacts) => {
-
-  //     if (err) throw err;
-  //     console.log(contacts)
-     
-  //     this.setState({contacts})
-  //   })
-  // }
   render() {
 
     return (

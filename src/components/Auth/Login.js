@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
+import { StackActions, NavigationActions, withNavigation  } from 'react-navigation';
 
 import Divider from '@components/Divider'
 
 import styles from './styles';
 
-class Auth extends Component {
+class Login extends Component {
   state = {
     email: "langtutansang@gmail.com",
     password: "Ltts11021996",
@@ -15,6 +16,13 @@ class Auth extends Component {
     isLoginAnonymous: false
   }
 
+  navigaHome = () => {
+    const action = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'home' })],
+    });
+    this.props.navigation.dispatch(action)
+  }
   login = () => {
     let { email, password } = this.state;
     let self = this;
@@ -22,9 +30,8 @@ class Auth extends Component {
     self.setState({ isLogin: true })
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){   
-        self.setState({ isLogin: false }, 
-          // () =>  Actions.home({type: 'reset'})
-          )
+        self.setState({ isLogin: false }, self.navigaHome
+        )
        
       })
       .catch(function (error) {
@@ -44,8 +51,8 @@ class Auth extends Component {
     firebase.auth().signInAnonymouslyAndRetrieveData()
     .then(function(){
       self.setState({ isLoginAnonymous: false }, 
-        //  () =>  Actions.home({type: 'reset'})
-         )
+        self.navigaHome
+      )
     })
     .catch(function(error){
       ToastAndroid.showWithGravity(
@@ -128,4 +135,4 @@ class Auth extends Component {
     )
   }
 }
-export default Auth;
+export default withNavigation(Login);

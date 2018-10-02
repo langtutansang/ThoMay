@@ -5,17 +5,26 @@ import Background from '@components/Background'
 import firebase from 'react-native-firebase';
 import styles from './styles';
 
+import { StackActions, NavigationActions } from 'react-navigation';
+
 class AuthContainer extends Component {
   unsubscriber = null;
+
   componentDidMount(){
     let { navigation } = this.props;
     this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
-      if (!user)  navigation.navigate('login')
-      if (user)navigation.navigate('home');
-      this.unsubscriber();
+
+      const action = StackActions.reset({
+        index: 0,
+        actions: [NavigationActions.navigate({ routeName: (!user ? 'login' : 'home')  })],
+        
+      });
+      this.props.navigation.dispatch(action);
     });
   }
-
+  componentWillUnmount(){
+    this.unsubscriber();
+  }
   render() {
     return (
       <Background>

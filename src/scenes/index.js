@@ -6,8 +6,8 @@ import LoginContainer from '@containers/Auth/login-container'
 import RegisterContainer from '@containers/Auth/register-container'
 import ForgotPasswordContainer from '@containers/Auth/forgot-password-container'
 import Content from '@components/Content'
-import {Home, List, Contacts} from '@containers'
-import { TITLE_HOME, TITLE_CATEGORY} from '@constants/title'
+import { Home, List, Contacts } from '@containers'
+// import { TITLE_HOME, TITLE_CATEGORY} from '@constants/title'
 // const scenes = Actions.create(
 //   <Stack key="root" hideNavBar>
 //       {/* auth */}
@@ -26,9 +26,10 @@ import { TITLE_HOME, TITLE_CATEGORY} from '@constants/title'
 const scenes = createStackNavigator( {
   auth: Auth,
   login: LoginContainer,
-  home: Home,
+  home: Home ,
 },
 {
+  headerMode: 'none',
   initialRouteName: 'auth',
 });
 
