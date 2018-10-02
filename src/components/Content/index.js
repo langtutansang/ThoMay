@@ -4,11 +4,11 @@ import FooterComonent from './Footer'
 import HeaderComponent from './Header'
 class Content extends Component {
   render() {
-    let { contentChild, routeName, title } = this.props;
+    let { contentChild, routeName, ...rest } = this.props;
     let Child = contentChild;
     return (
       <Container>
-        <HeaderComponent title={title}/>
+        <HeaderComponent {...rest}/>
         <ContentBase padder>
           <Child/>
         </ContentBase>

@@ -64,18 +64,11 @@ class Home extends Component {
       <View>
         <Button 
           info
-          onPress= {() => Actions.drawer()}
-        >
-      
-              <Text> Primary </Text>
-            </Button>
-            <Button 
-          info
           onPress= {this.logout}
         >
       
-              <Text> Logout </Text>
-            </Button>
+          <Text> Logout </Text>
+        </Button>
       </View>
     )
   }

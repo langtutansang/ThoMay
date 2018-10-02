@@ -280,7 +280,8 @@ export default (variables = variable) => {
         },
         "NativeBase.Text": {
           color: variables.inverseTextColor,
-          backgroundColor: "transparent"
+          backgroundColor: "transparent",
+         
         }
       }
     },
