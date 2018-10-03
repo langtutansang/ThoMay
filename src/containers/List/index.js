@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 
-import {View, Container, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
+import {View, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
 import { CATEGORY_CONTACTS } from '@constants/title'
 class List extends Component {
-
   render() {
      return (
       <View>

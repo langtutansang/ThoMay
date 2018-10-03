@@ -66,6 +66,7 @@ class Login extends Component {
   
   render() {
     let { isLogin, isLoginAnonymous }  = this.state;
+    let { navigation : { navigate }}  = this.props;
 
     return (
       <View pointerEvents={ isLogin ? "none" : "auto"}>
@@ -98,8 +99,7 @@ class Login extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={() =>{}
-            //  Actions.register()
+            onPress={() =>navigate('register')
              }>
             <Text>
               {'Đăng ký'}
@@ -107,8 +107,7 @@ class Login extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => {}
-            //  Actions.forgotPassword()
+            onPress={() => navigate('forgotPassword')
              }>
             <Text>
               {'Quên mật khẩu ?'}

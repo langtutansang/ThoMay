@@ -14,6 +14,14 @@ class Register extends Component {
     isRegister: false
   }
 
+  navigaHome = () => {
+    const action = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'home' })],
+    });
+    this.props.navigation.dispatch(action)
+  }
+
   register = () => {
     let { email, password, repassword } = this.state;
     let self = this;
@@ -30,7 +38,7 @@ class Register extends Component {
     }
     firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){
-        self.setState({ isRegister: false })
+        self.setState({ isRegister: false }, self.navigaHome)
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
@@ -43,7 +51,7 @@ class Register extends Component {
   }
   render() {
     let { isRegister }  = this.state;
-
+    let { navigation : { navigate }}  = this.props;
     return (
       <View pointerEvents={ isRegister ? "none" : "auto"}>
         <View style={styles.formInput}>
@@ -86,8 +94,7 @@ class Register extends Component {
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
 
-            onPress={() => {}
-            //  Actions.login()
+            onPress={() => navigate('login')
              }>
             <Text>
               {'Đăng nhập'}
@@ -95,8 +102,7 @@ class Register extends Component {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>{}
-            //  Actions.forgotPassword()
+            onPress={() => navigate('forgotPassword')
              }>
             <Text>
               {'Quên mật khẩu ?'}

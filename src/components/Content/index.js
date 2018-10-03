@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import { Container, Content as ContentBase } from 'native-base';
-import FooterComonent from './Footer'
-import HeaderComponent from './Header'
-class Content extends Component {
+
+import Content from './Content'
+import NestedNavigator from './RouteContent'
+
+class ContentRoute extends Component {
+
   render() {
-    let { contentChild, routeName, ...rest } = this.props;
-    let Child = contentChild;
     return (
-      <Container>
-        <HeaderComponent {...rest}/>
-        <ContentBase padder>
-          <Child/>
-        </ContentBase>
-        <FooterComonent routeName={routeName} />     
-      </Container>
+      <Content>
+        <NestedNavigator/>
+      </Content>    
     );
   }
 }
-export default Content;
+export default ContentRoute;

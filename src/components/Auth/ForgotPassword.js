@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
-import Divider from '@components/Divider'
 
 import styles from './styles';
 
@@ -11,6 +10,15 @@ class ForgotPassword extends Component {
     email: "langtutansang@gmail.com",
     isForgot: false
   }
+
+  navigaHome = () => {
+    const action = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'home' })],
+    });
+    this.props.navigation.dispatch(action)
+  }
+
 
   forgotPassword = () => {
     let { email} = this.state;
@@ -24,8 +32,7 @@ class ForgotPassword extends Component {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
         );
-        self.setState({ isForgot: false })
-        // Actions.login()
+        self.setState({ isForgot: false },  self.navigaHome)
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(
@@ -38,6 +45,7 @@ class ForgotPassword extends Component {
   }
   render() {
     let { isForgot }  = this.state;
+    let { navigation : { navigate }}  = this.props;
 
     return (
       <View pointerEvents={ isForgot ? "none" : "auto"}>
@@ -59,19 +67,14 @@ class ForgotPassword extends Component {
         </View>
         <View style={styles.touchableOpacity}>
           <TouchableOpacity
-
-            onPress={() => {}
-            // Actions.login()
-            }>
+            onPress={() => navigate('login') }>
             <Text>
               {'Đăng nhập'}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() =>  {}
-            // Actions.register()
-          }>
+            onPress={() => navigate('register') }>
             <Text>
               {'Đăng ký ?'}
             </Text>

@@ -8,6 +8,7 @@
     "app-push": "appcenter codepush -a MayDo -d Production -m --description capnhat",
     "app-code-push": "code-push release-react MayDo android -d Production -m --description 'cap nhat'",
     "chay": "react-native run-android",
+    "build-android": "cd android && gradlew assembleRelease",
     "test": "jest"
   },
   "dependencies": {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { TITLE_HOME, TITLE_CATEGORY, TITLE_PRODUCT, TITLE_OTHER} from '@constants/title'
+import { withNavigation  } from 'react-navigation';
 
 class FooterComponent extends Component {
   render() {
@@ -44,7 +45,7 @@ class FooterComponent extends Component {
               vertical key={ key } 
               active={router === routeName ? true: false}
               onPress={ ()=> {}}
-              // onPress={()=> Actions[router]({type: 'replace'})}
+              onPress={()=>this.props.navigation.navigate(router)}
               >
               {e.badge !== 0 && <Badge><Text>{badge}</Text></Badge>}
               <Icon active={router === routeName ? true: false} name={icon} />
@@ -58,6 +59,6 @@ class FooterComponent extends Component {
     );
   }
 }
-export default FooterComponent;
+export default withNavigation(FooterComponent);
 
 

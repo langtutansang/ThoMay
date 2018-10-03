@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase';
 
 import Contacts from 'react-native-contacts';
 import { checkReadContact, requestReadContact} from '@components/Permission/contacts';
-class Home extends Component {
+class Dashboard extends Component {
   
   logout = () => {
     firebase.auth().signOut().then(
@@ -36,4 +36,4 @@ class Home extends Component {
     )
   }
 }
-export default Home;
+export default Dashboard;
