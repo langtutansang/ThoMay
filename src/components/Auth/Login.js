@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
-import { StackActions, NavigationActions, withNavigation  } from 'react-navigation';
+import { withNavigation  } from 'react-navigation';
+import navigateReset from '@components/Navigate';
 
 import Divider from '@components/Divider'
 
@@ -16,12 +17,8 @@ class Login extends Component {
     isLoginAnonymous: false
   }
 
-  navigaHome = () => {
-    const action = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'home' })],
-    });
-    this.props.navigation.dispatch(action)
+  navigateHome = () => {
+    navigateReset(this.props.navigation, 'home')
   }
   login = () => {
     let { email, password } = this.state;
@@ -30,7 +27,7 @@ class Login extends Component {
     self.setState({ isLogin: true })
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){   
-        self.setState({ isLogin: false }, self.navigaHome
+        self.setState({ isLogin: false }, self.navigateHome
         )
        
       })
@@ -51,7 +48,7 @@ class Login extends Component {
     firebase.auth().signInAnonymouslyAndRetrieveData()
     .then(function(){
       self.setState({ isLoginAnonymous: false }, 
-        self.navigaHome
+        self.navigateHome
       )
     })
     .catch(function(error){

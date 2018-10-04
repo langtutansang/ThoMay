@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import { Footer, FooterTab, Button, Icon, Text, Badge } from 'native-base';
 import { TITLE_HOME, TITLE_CATEGORY, TITLE_PRODUCT, TITLE_OTHER} from '@constants/title'
 import { withNavigation  } from 'react-navigation';
+import navigateReset from '@components/Navigate';
 
 class FooterComponent extends Component {
   render() {
-    let { routeName } = this.props;
+    let { navigation: { state: { routeName, params } } }= this.props;
     let content = [{
       name: TITLE_HOME,
       icon: "home",
@@ -43,12 +44,11 @@ class FooterComponent extends Component {
             return <Button 
               badge={e.badge !== 0 ? true : false} 
               vertical key={ key } 
-              active={router === routeName ? true: false}
-              onPress={ ()=> {}}
-              onPress={()=>this.props.navigation.navigate(router)}
+              active={ (router === routeName || ( !!params && !!params.preRoute && router === params.preRoute) ) ? true : false }
+              onPress={()=> navigateReset(this.props.navigation,router)}
               >
               {e.badge !== 0 && <Badge><Text>{badge}</Text></Badge>}
-              <Icon active={router === routeName ? true: false} name={icon} />
+              <Icon name={icon} />
               <Text>{name}</Text>
             </Button>
           })}

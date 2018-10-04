@@ -5,7 +5,7 @@ import Background from '@components/Background'
 import firebase from 'react-native-firebase';
 import styles from './styles';
 
-import { StackActions, NavigationActions } from 'react-navigation';
+import navigateReset from '@components/Navigate';
 
 class AuthContainer extends Component {
   unsubscriber = null;
@@ -13,13 +13,7 @@ class AuthContainer extends Component {
   componentDidMount(){
     let { navigation } = this.props;
     this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
-
-      const action = StackActions.reset({
-        index: 0,
-        actions: [NavigationActions.navigate({ routeName: (!user ? 'login' : 'home')  })],
-        
-      });
-      this.props.navigation.dispatch(action);
+      navigateReset( this.props.navigation, !user ? 'login' : 'home')
     });
   }
   componentWillUnmount(){

@@ -5,14 +5,14 @@ import HeaderComponent from './Header'
 
 class Content extends Component {
   render() {
-    let { children, routeName, ...rest } = this.props;
+    let { children } = this.props;
     return (
       <Container>
-        <HeaderComponent {...rest}/>
-        <ContentBase padder>
+        <HeaderComponent/>
+        <ContentBase>
           {children}
         </ContentBase>
-        <FooterComonent routeName={routeName} />     
+        <FooterComonent/>     
       </Container>
     );
   }

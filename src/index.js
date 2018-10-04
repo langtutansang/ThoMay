@@ -4,8 +4,7 @@ import Scenes from '@scenes';
 import { Provider } from 'react-redux';
 import configureStore from './store/configureStore';
 import Drawer from '@components/Drawer'
-
-import { StyleProvider } from 'native-base';
+import { Root, StyleProvider } from 'native-base';
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
 
@@ -50,13 +49,16 @@ class App extends Component {
 
     const store =configureStore();
     return (
-      <StyleProvider style={getTheme(material)}>
-        <Provider store={store}>
-          <Drawer>
-            <Scenes/>
-          </Drawer>
-        </Provider>
-      </StyleProvider>
+      <Root>
+        <StyleProvider style={getTheme(material)}>
+          <Provider store={store}>
+            <Drawer>
+              <Scenes/>
+            </Drawer>
+          </Provider>
+        </StyleProvider>
+      </Root>
+
     );
   }
 }

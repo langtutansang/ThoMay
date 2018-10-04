@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 
 import {View, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
 import { CATEGORY_CONTACTS } from '@constants/title'
+import { StackActions, withNavigation } from 'react-navigation';
+
 class List extends Component {
   render() {
      return (
       <View>
         <Card>
           <CardItem button 
-          // onPress={()=> Actions.contacts({type: ActionConst.REPLACE })}
+          onPress={()=> this.props.navigation.navigate( 'contacts', { preRoute: 'list' }) }
           >
             <Left>
               <Thumbnail square source={require('@thumbnails/category/Contacts.png')} />
@@ -24,4 +26,4 @@ class List extends Component {
     )
   }
 }
-export default List;
+export default withNavigation(List);

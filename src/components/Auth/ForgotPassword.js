@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 
 import styles from './styles';
+import navigateReset from '@components/Navigate';
 
 class ForgotPassword extends Component {
   state = {
@@ -11,12 +12,8 @@ class ForgotPassword extends Component {
     isForgot: false
   }
 
-  navigaHome = () => {
-    const action = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'home' })],
-    });
-    this.props.navigation.dispatch(action)
+  navigateLogin = () => {
+    navigateReset(this.props.navigation, 'login')
   }
 
 
@@ -32,7 +29,7 @@ class ForgotPassword extends Component {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER
         );
-        self.setState({ isForgot: false },  self.navigaHome)
+        self.setState({ isForgot: false },  self.navigateLogin)
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(

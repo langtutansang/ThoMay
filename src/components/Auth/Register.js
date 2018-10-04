@@ -3,7 +3,7 @@ import { View, TextInput, TouchableOpacity, TouchableHighlight, Text, ToastAndro
 import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import Divider from '@components/Divider'
-
+import navigateReset from '@components/Navigate';
 import styles from './styles';
 
 class Register extends Component {
@@ -14,12 +14,9 @@ class Register extends Component {
     isRegister: false
   }
 
-  navigaHome = () => {
-    const action = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'home' })],
-    });
-    this.props.navigation.dispatch(action)
+  navigateLogin = () => {
+    navigateReset(this.props.navigation, 'login')
+
   }
 
   register = () => {
@@ -38,7 +35,7 @@ class Register extends Component {
     }
     firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(email, password)
       .then(function(){
-        self.setState({ isRegister: false }, self.navigaHome)
+        self.setState({ isRegister: false }, self.navigateLogin)
       })
       .catch(function (error) {
         ToastAndroid.showWithGravity(

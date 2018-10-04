@@ -1,24 +1,43 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import firebase from 'react-native-firebase';
-import { View, Text, Button, Icon } from 'native-base';
-import PopupDialog from 'react-native-popup-dialog';
+import { View, Text, Button, Icon, ActionSheet } from 'native-base';
 import { checkReadContact, requestReadContact } from '@components/Permission/contacts';
+import { withNavigation  } from 'react-navigation';
+import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 
 class List extends Component {
 
   constructor(props) {
     super(props);
     let { uid } = firebase.auth().currentUser._user;
-
+    let { left, right, navigation } = props;
+    
+    if (!left || !right) navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader() })
     this.ref = firebase.firestore().collection('contacts');
 
     this.state = {
       uid,
       dataContacts: []
     }
-    // if (!props.left || !props.right) Actions.contacts({ left: this.renderLeftHeader(), right: this.renderRightHeader() })
   }
+
+  showMenuContact = () => {
+    var BUTTONS = ['Tạo mới', 'Lấy từ danh bạ' ];
+
+    ActionSheet.show(
+      {
+        options: BUTTONS,
+        cancelButtonIndex: CANCEL_INDEX,
+        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        title: "Chọn từ"
+      },
+      buttonIndex => {
+        this.setState({ clicked: BUTTONS[buttonIndex] });
+      }
+    )
+  }
+  
   renderLeftHeader = () => {
     return (
       <Button transparent onPress={this.setBack}>
@@ -32,20 +51,17 @@ class List extends Component {
         <Icon name='ios-contacts' />
       </Button>)
   }
-  setBack = () => {
-    Actions.list({ type: ActionConst.REPLACE })
-  }
 
   showContactDevice = () => {
 
     checkReadContact()
       .then(
         res => {
-          if (res) this.getContact()
+          if (res) this.showMenuContact()
           else
             requestReadContact()
               .then(res => {
-                if (res) this.getContact()
+                if (res) this.showMenuContact()
               })
               .catch(err => console.log(err))
         }
@@ -55,31 +71,24 @@ class List extends Component {
       )
   }
 
-
   getContact = () => {
    
     Contacts.getAll((err, contacts) => {
-
       if (err) throw err;
-      console.log(contacts)
       this.setState({ contacts})
-      this.popupDialog.show();
-
     })
   }
 
   componentDidMount() {
-    this.popupDialog.show();
-    BackHandler.addEventListener('hardwareBackPress', this.setBack);
+    // BackHandler.addEventListener('hardwareBackPress', this.props.navigation.);
     this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
-
   }
   onCollectionUpdate = (querySnapshot) => {
     const dataContacts = [];
     querySnapshot.forEach((e) => {
       let { name } = e.data();
       dataContacts.push({
-        name, // DocumentSnapshot
+        name,
       });
     });
     this.setState({
@@ -97,21 +106,12 @@ class List extends Component {
 
     return (
       <View>
-        <PopupDialog
-          ref={(popupDialog) => { this.popupDialog = popupDialog; }}
-        >
-          <View>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-            <Text>Hello</Text>
-          </View>
-        </PopupDialog>
+        <Button transparent onPress={this.showMenuContact}>
+          <Icon name='arrow-back' />
+        </Button>
         {dataContacts.map((e, key) => <Text key={key}>{e.name}</Text>)}
       </View>
     )
   }
 }
-export default List;
+export default withNavigation(List);
