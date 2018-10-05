@@ -2,9 +2,19 @@ import React, { Component } from 'react';
 
 import {View, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
 import { CATEGORY_CONTACTS } from '@constants/title'
-import { StackActions, withNavigation } from 'react-navigation';
+import { withNavigation } from 'react-navigation';
+import { BackHandler } from 'react-native';
 
 class List extends Component {
+  setBack = () => {
+    return true
+  }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.setBack);
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.setBack);
+  }
   render() {
      return (
       <View>

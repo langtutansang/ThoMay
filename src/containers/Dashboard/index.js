@@ -3,10 +3,18 @@ import { StackActions, NavigationActions } from 'react-navigation';
 
 import { Button, Text, View } from 'native-base';
 import firebase from 'react-native-firebase';
+import { BackHandler } from 'react-native';
 
-import { checkReadContact, requestReadContact} from '@components/Permission/contacts';
 class Dashboard extends Component {
-  
+  setBack = () => {
+    return true
+  }
+  componentDidMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.setBack);
+  }
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.setBack);
+  }
   logout = () => {
     firebase.auth().signOut().then(
       ()=>{

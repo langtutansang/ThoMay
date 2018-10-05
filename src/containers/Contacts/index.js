@@ -35,7 +35,9 @@ class List extends Component {
         destructiveButtonIndex: DESTRUCTIVE_INDEX,
         title: "Chọn từ"
       },
-      key => this.props.navigation.navigate(BUTTONS[key].screen)
+      key =>{
+        if( !!BUTTONS[key])this.props.navigation.navigate(BUTTONS[key].screen,{ preRoute: 'list' })
+      } 
     )
   }
   
@@ -74,6 +76,7 @@ class List extends Component {
   }
   setBack = () => {
     this.props.navigation.navigate('list')
+    return true;
   }
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress',this.setBack);
