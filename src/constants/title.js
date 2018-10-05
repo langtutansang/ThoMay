@@ -5,3 +5,4 @@ export const TITLE_OTHER = 'Khác';
 
 
 export const CATEGORY_CONTACTS = 'Danh bạ';
+export const CATEGORY_FROMCONTACTS = 'Lấy từ';

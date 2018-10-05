@@ -4,7 +4,6 @@ import { StackActions, NavigationActions } from 'react-navigation';
 import { Button, Text, View } from 'native-base';
 import firebase from 'react-native-firebase';
 
-import Contacts from 'react-native-contacts';
 import { checkReadContact, requestReadContact} from '@components/Permission/contacts';
 class Dashboard extends Component {
   

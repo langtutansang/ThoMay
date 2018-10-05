@@ -5,6 +5,7 @@ import { View, Text, Button, Icon, ActionSheet } from 'native-base';
 import { checkReadContact, requestReadContact } from '@components/Permission/contacts';
 import { withNavigation  } from 'react-navigation';
 import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
+import { CATEGORY_CONTACTS } from '@constants/title'
 
 class List extends Component {
 
@@ -13,7 +14,7 @@ class List extends Component {
     let { uid } = firebase.auth().currentUser._user;
     let { left, right, navigation } = props;
     
-    if (!left || !right) navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader() })
+    if (!left || !right) navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
     this.ref = firebase.firestore().collection('contacts');
 
     this.state = {
@@ -23,8 +24,10 @@ class List extends Component {
   }
 
   showMenuContact = () => {
-    var BUTTONS = ['Tạo mới', 'Lấy từ danh bạ' ];
-
+    var BUTTONS = [
+      { text: 'Tạo mới', screen: 'contacts' },
+      { text: 'Lấy từ danh bạ', screen: 'listContacts'} 
+    ];
     ActionSheet.show(
       {
         options: BUTTONS,
@@ -32,9 +35,7 @@ class List extends Component {
         destructiveButtonIndex: DESTRUCTIVE_INDEX,
         title: "Chọn từ"
       },
-      buttonIndex => {
-        this.setState({ clicked: BUTTONS[buttonIndex] });
-      }
+      key => this.props.navigation.navigate(BUTTONS[key].screen)
     )
   }
   
@@ -49,7 +50,8 @@ class List extends Component {
     return (
       <Button transparent onPress={this.showContactDevice}>
         <Icon name='ios-contacts' />
-      </Button>)
+      </Button>
+    )
   }
 
   showContactDevice = () => {
@@ -70,17 +72,11 @@ class List extends Component {
         err => console.log(err)
       )
   }
-
-  getContact = () => {
-   
-    Contacts.getAll((err, contacts) => {
-      if (err) throw err;
-      this.setState({ contacts})
-    })
+  setBack = () => {
+    this.props.navigation.navigate('list')
   }
-
   componentDidMount() {
-    // BackHandler.addEventListener('hardwareBackPress', this.props.navigation.);
+    BackHandler.addEventListener('hardwareBackPress',this.setBack);
     this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
   }
   onCollectionUpdate = (querySnapshot) => {

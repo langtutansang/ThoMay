@@ -10,14 +10,14 @@ class HeaderComponent extends Component {
 
   render() {
     let { navigation: { state: { params } } }= this.props;
-    let { left, body, right } = params || {};
+    let { left, body, right, title } = params || {};
     return (
       <View>
         { ( !left && !body && !right ) ? null :
 
         <Header>
         
-          <Left>
+          <Left style={{flex:1}}>
             { (!!left) ? left :
               <Button 
                 transparent
@@ -28,12 +28,12 @@ class HeaderComponent extends Component {
             }
           </Left>
           
-          <Body>
+          <Body style={{flex:1}}>
             { !!body ? body :
-            <Title>{this.props.title}</Title>
+            <Title>{title}</Title>
             }
           </Body>
-          <Right>{!!right ? right : null}</Right>
+          <Right style={{flex:1}}>{!!right ? right : null}</Right>
           </Header> }
       </View>
 

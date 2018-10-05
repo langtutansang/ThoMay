@@ -6,7 +6,7 @@ import LoginContainer from '@containers/Auth/login-container'
 import RegisterContainer from '@containers/Auth/register-container'
 import ForgotPasswordContainer from '@containers/Auth/forgot-password-container'
 import Content from '@components/Content/Content'
-import { Dashboard, List, Contacts } from '@containers'
+import { Dashboard, List, Contacts, ListContact } from '@containers'
 
 // import { TITLE_HOME, TITLE_CATEGORY} from '@constants/title'
 // const scenes = Actions.create(
@@ -35,6 +35,7 @@ const scenes = createStackNavigator( {
   home: renderComponentContent(Dashboard) ,
   list: renderComponentContent(List) ,
   contacts: renderComponentContent(Contacts) ,
+  listContacts: renderComponentContent(ListContact)
 },
 {
   headerMode: 'none',
