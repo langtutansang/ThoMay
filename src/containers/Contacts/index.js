@@ -25,8 +25,8 @@ class List extends Component {
 
   showMenuContact = () => {
     var BUTTONS = [
-      { text: 'Tạo mới', screen: 'contacts' },
-      { text: 'Lấy từ danh bạ', screen: 'listContacts'} 
+      { text: 'Tạo mới', screen: () => this.props.navigation.navigate('insertContact',{ preRoute: 'list' }) },
+      { text: 'Lấy từ danh bạ', screen: () => this.props.navigation.navigate('listContacts',{ preRoute: 'list' })} 
     ];
     ActionSheet.show(
       {
@@ -36,7 +36,7 @@ class List extends Component {
         title: "Chọn từ"
       },
       key =>{
-        if( !!BUTTONS[key])this.props.navigation.navigate(BUTTONS[key].screen,{ preRoute: 'list' })
+        if( !!BUTTONS[key]) BUTTONS[key].screen()
       } 
     )
   }
