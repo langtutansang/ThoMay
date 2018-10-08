@@ -5700,6 +5700,14 @@ react-native-firebase@^4.3.8:
     postinstall-build "^5.0.1"
     prop-types "^15.6.1"
 
+react-native-gesture-handler@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.7.tgz#86677c709c42d04555210cad9759b09e2c657720"
+  dependencies:
+    hoist-non-react-statics "^2.3.1"
+    invariant "^2.2.2"
+    prop-types "^15.5.10"
+
 react-native-icon-badge@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/react-native-icon-badge/-/react-native-icon-badge-1.1.3.tgz#43de0c923afe4968dfcff127ec5c57057b16f787"
@@ -5714,6 +5722,10 @@ react-native-keyboard-aware-scroll-view@0.5.0:
   dependencies:
     prop-types "^15.6.0"
     react-native-iphone-x-helper "^1.0.1"
+
+react-native-largelist-v2@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-largelist-v2/-/react-native-largelist-v2-2.1.0.tgz#fe7bc0ac7a34ff526a74b88ee1428a44ae7add95"
 
 react-native-permissions@^1.1.1:
   version "1.1.1"
@@ -5739,6 +5751,10 @@ react-native-screens@^1.0.0-alpha.11:
 react-native-simple-dialogs@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/react-native-simple-dialogs/-/react-native-simple-dialogs-0.4.1.tgz#313c264680ba8a33545b37eae46926a3c4824553"
+
+react-native-spring-scrollview@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/react-native-spring-scrollview/-/react-native-spring-scrollview-0.0.24.tgz#a1d74cbd844a038be279a41efb299b5e194f262c"
 
 react-native-tab-view@^0.0.77:
   version "0.0.77"

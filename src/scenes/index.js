@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
-
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import Auth from '@containers/Auth/auth-container'
 import LoginContainer from '@containers/Auth/login-container'
 import RegisterContainer from '@containers/Auth/register-container'
@@ -24,14 +24,24 @@ import { Dashboard, List, Contacts, ListContact } from '@containers'
 //   </Stack>
 // );
 let renderComponentContent = (Child) =>{ 
-  let comp =  {screen: () => <Content><Child/></Content>}
+  let comp =  {screen: () => {
+    let Cont = gestureHandlerRootHOC(Child)
+    return (<Content><Cont/></Content>)
+  }}
   return comp
 }
+let renderComponent = (Child) =>{ 
+  let comp =  {screen: () => {
+    let Cont = gestureHandlerRootHOC(Child)
+    return (<Cont/>)
+  }}
+  return comp
+} 
 const scenes = createStackNavigator( {
-  auth: Auth,
-  login: LoginContainer,
-  register: RegisterContainer,
-  forgotPassword: ForgotPasswordContainer,
+  auth: renderComponent(Auth),
+  login: renderComponent(LoginContainer),
+  register: renderComponent(RegisterContainer),
+  forgotPassword: renderComponent(ForgotPasswordContainer),
   home: renderComponentContent(Dashboard) ,
   list: renderComponentContent(List) ,
   contacts: renderComponentContent(Contacts) ,
@@ -39,7 +49,7 @@ const scenes = createStackNavigator( {
 },
 {
   headerMode: 'none',
-  initialRouteName: 'listContacts',
+  initialRouteName: 'auth',
 });
 
 export default scenes;

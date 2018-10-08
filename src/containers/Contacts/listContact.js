@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { List, ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
 import { BackHandler, FlatList } from 'react-native';
+import { LargeList } from "react-native-largelist-v2";
 
 import { withNavigation } from 'react-navigation';
 import Contacts from 'react-native-contacts';
 import { CATEGORY_FROMCONTACTS } from '@constants/title'
-
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
 import Item from '@components/ListItem'
 class ListContact extends Component {
 
@@ -113,21 +114,28 @@ class ListContact extends Component {
     let { dataContacts } = this.state;
     
     return (
-        <FlatList 
-          data={this.state.dataContacts}
-          extraData={this.state}
-          initialNumToRender={8}
-          maxToRenderPerBatch={2}
-          onEndReachedThreshold={0.5}
-          renderItem={this.renderItem}
-          keyExtractor={ ({item,index}) => index+'key' }
+        // <FlatList 
+        //   data={dataContacts}
+        //   extraData={this.state}
+        //   initialNumToRender={8}
+        //   maxToRenderPerBatch={2}
+        //   onEndReachedThreshold={0.5}
+        //   renderItem={this.renderItem}
+        //   keyExtractor={ ({item,index}) => index+'key' }
 
+        // />
+        <LargeList
+          style={styles.container}
+          data={dataContacts}
+          heightForSection={() => 50}
+          renderSection={this.renderItem}
+          heightForIndexPath={() => 50}
+          // renderIndexPath={this._renderIndexPath}
         />
-          
 
     )
   }
 }
 
-export default withNavigation(ListContact);
+export default withNavigation(gestureHandlerRootHOC(ListContact));
 
