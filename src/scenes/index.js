@@ -39,7 +39,7 @@ const scenes = createStackNavigator( {
 },
 {
   headerMode: 'none',
-  initialRouteName: 'listContacts',
+  initialRouteName: 'auth',
 });
 
 export default scenes;

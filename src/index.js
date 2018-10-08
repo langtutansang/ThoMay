@@ -7,7 +7,6 @@ import Drawer from '@components/Drawer'
 import { Root, StyleProvider } from 'native-base';
 import getTheme from '../native-base-theme/components';
 import material from '../native-base-theme/variables/material';
-
 class App extends Component {
   // constructor(props) {
   //   super(props);
@@ -52,6 +51,7 @@ class App extends Component {
       <Root>
         <StyleProvider style={getTheme(material)}>
           <Provider store={store}>
+
             <Drawer>
               <Scenes/>
             </Drawer>
