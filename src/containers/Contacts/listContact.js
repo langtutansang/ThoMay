@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { List, ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
-import { BackHandler, FlatList, View } from 'react-native';
+import { BackHandler, FlatList } from 'react-native';
+import { LargeList } from "react-native-largelist-v2";
 
 import { withNavigation } from 'react-navigation';
 import Contacts from 'react-native-contacts';
 import { CATEGORY_FROMCONTACTS } from '@constants/title'
+import Item from '@components/ListItem'
 
 class ListContact extends Component {
 
@@ -23,20 +25,23 @@ class ListContact extends Component {
 
   setContact = (dataContacts) => {
 
-    dataContacts = dataContacts.map(e => {
-      let givenName = [e.givenName, e.middleName, e.familyName].filter(e => !!e).join(' ')
-      return {
+    let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
+    let data = {};
+    dataContacts = dataContacts.forEach(e => {
+      let givenName = [e.givenName, e.middleName, e.familyName].filter(e => !!e).join(' ');
+      let index = givenName.indexOf(arrayChar) !== -1 ? arrayChar[index] : '#';
+      if(!data[index]) data[index] = {item:[]};
+      data[index].item.push( {
         givenName,
         id: e.recordID,
         thumbnailPath: e.thumbnailPath,
         phoneNumbers: e.phoneNumbers
-      }
+      })
+      
     })
-
-    let arrayChar = [...Array(26)].map((_, i) => ({ id: 'divider' + i, givenName: String.fromCharCode('A'.charCodeAt(0) + i), divider: true }));
-    let data = [...dataContacts, ...arrayChar, { id: 'divider#', givenName: '#', divider: true }]
-    data.sort((a, b) => this.capitalize(a.givenName).localeCompare(this.capitalize(b.givenName)))
-    data = data.length === 27 ? data : data.filter((e, key) => !((!!data[key + 1] && !!e.divider && data[key + 1].divider) || (key === (data.length - 1) && !!e.divider)))
+    data = Object.keys(data).map(function(e,key) {
+      return { title: key, item : e.item}
+    });
     this.setState({ dataContacts: data })
   }
 
@@ -89,7 +94,9 @@ class ListContact extends Component {
     this.setState({ key });
   }
   
-  renderItem = ({ item }) => {
+  renderItem = (section) => {
+    let {dataContacts} = this.state
+    let item = dataContacts[section]
     return (!!item.divider ?
       <ListItem itemDivider >
         <Text>{item.givenName}</Text>
@@ -112,29 +119,24 @@ class ListContact extends Component {
   render() {
     let { dataContacts } = this.state;
     return (
-      <List>
-        {dataContacts.map((item) => {
-            return (!!item.divider ?
-              <ListItem itemDivider key={item.id}>
-                <Text>{item.givenName}</Text>
-              </ListItem> :
-              <ListItem
-                key={item.id}
-                button onPress={() => this.onPress(item.id)}
-                noIndent
-                style={{ backgroundColor: item.id === this.state.key ? "#cde1f9" : '#fff' }}>
-                <Left style={{ flex: 1 }}>
-                  <Thumbnail square source={!!item.thumbnailPath ? { uri: item.thumbnailPath } : require('@thumbnails/category/default-contact.png')} />
-                </Left>
-                <Body style={{ flex: 4 }}>
-                  <Text>{item.givenName}</Text>
-                  {item.phoneNumbers.length > 0 && item.phoneNumbers.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
-                </Body>
-              </ListItem>
-            )
-          }
-          )}
-      </List>
+        // <FlatList 
+        //   data={dataContacts}
+        //   extraData={this.state}
+        //   initialNumToRender={8}
+        //   maxToRenderPerBatch={2}
+        //   onEndReachedThreshold={0.5}
+        //   renderItem={this.renderItem}
+        //   keyExtractor={ ({item,index}) => index+'key' }
+
+        // />
+        <LargeList
+          data={dataContacts}
+          heightForSection={() => 50}
+          renderSection={this.renderItem}
+          heightForIndexPath={() => 50}
+          renderIndexPath={this.renderItem}
+        />
+
     )
   }
 }
