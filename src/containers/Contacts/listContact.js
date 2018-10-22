@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import { List, ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
-import { BackHandler, FlatList } from 'react-native';
+import { Content, List, ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
+import { BackHandler } from 'react-native';
 import { LargeList } from "react-native-largelist-v2";
-
+import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 import { withNavigation } from 'react-navigation';
 import Contacts from 'react-native-contacts';
 import { CATEGORY_FROMCONTACTS } from '@constants/title'
-import Item from '@components/ListItem'
-
+import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
+import Com from './component'
 class ListContact extends Component {
 
   constructor(props) {
@@ -46,7 +46,6 @@ class ListContact extends Component {
       
     })
     data = data.filter(e => e.items.length > 0)
-    console.log(data);
     this.setState({ dataContacts: data })
   }
 
@@ -81,15 +80,16 @@ class ListContact extends Component {
 
     Contacts.getContactsMatchingString("", (err, dataContacts) => {
       if (err) throw err;
-      this.setContact(dataContacts)
+      this.setState({dataContacts})
+      // this.setContact(dataContacts)
     })
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.setBack);
   }
-  // componentDidUpdate(prevProps, prevState){
-  //   if(prevState.key !== this.state.key && this.state.key !== -1) this.setParams()
-  // }
+  componentDidUpdate(prevProps, prevState){
+    if(prevState.key !== this.state.key && this.state.key !== -1) this.setParams()
+  }
   capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toLowerCase() + s.slice(1)
@@ -125,18 +125,20 @@ class ListContact extends Component {
     </Body>
   </ListItem>)
   }
+  
   render() {
     let { dataContacts } = this.state;
+    console.log(dataContacts)
     return (
         dataContacts.length === 0 ? <Text>Đang lấy dữ liệu</Text> :
-        <LargeList
-          data={dataContacts}
-          heightForSection={() => 50}
-          renderSection={this.renderSectionItem}
-          heightForIndexPath={() => 80}
-          renderIndexPath={this.renderIndexItem}
-        />
-
+          <Com onPress={this.onPress} key={this.state.key} dataContacts={dataContacts}/>
+        //   <LargeList
+        //   data={dataContacts}
+        //   heightForSection={() => 50}
+        //   renderSection={this.renderSectionItem}
+        //   heightForIndexPath={() => 80}
+        //   renderIndexPath={this.renderIndexItem}
+        // />
     )
   }
 }

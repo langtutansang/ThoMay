@@ -152,7 +152,8 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-gesture-handler')
+    compile project(':react-native-gesture-handler')
+    compile project(':react-native-image-picker')
     implementation project(':react-native-contacts')
     implementation project(':react-native-device-info')
     implementation project(':react-native-code-push')

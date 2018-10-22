@@ -26,9 +26,11 @@
     "react-native-contacts": "^2.2.3",
     "react-native-device-info": "^0.22.5",
     "react-native-firebase": "^4.3.8",
-    "react-native-gesture-handler": "^1.0.7",
+    "react-native-gesture-handler": "^1.0.8",
     "react-native-icon-badge": "^1.1.3",
-    "react-native-largelist-v2": "^2.1.0",
+    "react-native-image-picker": "^0.27.1",
+    "react-native-largelist-v2": "^2.1.1",
+    "react-native-optimized-flatlist": "^1.0.4",
     "react-native-permissions": "^1.1.1",
     "react-native-popup-dialog": "^0.15.0",
     "react-native-simple-dialogs": "^0.4.1",
@@ -51,6 +53,7 @@
   "jest": {
     "preset": "react-native",
     "setupFiles": [
+      "<rootDir>/node_modules/appcenter-analytics/test/AppCenterAnalyticsMock.js",
       "<rootDir>\\node_modules\\appcenter\\test\\AppCenterMock.js",
       "<rootDir>\\node_modules\\appcenter-analytics\\test\\AppCenterAnalyticsMock.js",
       "<rootDir>\\node_modules\\appcenter-crashes\\test\\AppCenterCrashesMock.js",
