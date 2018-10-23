@@ -3,7 +3,13 @@ package com.thomay;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.imagepicker.ImagePickerPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.rt2zz.reactnativecontacts.ReactNativeContacts;
+import com.microsoft.codepush.react.CodePush;
+
 import com.imagepicker.ImagePickerPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import io.invertase.firebase.RNFirebasePackage;
@@ -40,7 +46,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNGestureHandlerPackage(),
+            new VectorIconsPackage(),
+            new ImagePickerPackage(),
+            new RNFirebasePackage(),
+            new RNDeviceInfo(),
+            new ReactNativeContacts(),
+            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
+
+
+
             new ImagePickerPackage(),
             new ReactNativeContacts(),
             new RNFirebasePackage(),

@@ -29,8 +29,7 @@ class AddContact extends Component {
   }
   render(){
     return(
-
-      <AddContactForm saveContact={this.saveContact}/>
+      <AddContactForm saveContact={this.saveContact} form={this.props.navigation.state.params.data}/>
     )
   }
 }

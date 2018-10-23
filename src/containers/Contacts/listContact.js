@@ -1,63 +1,61 @@
 import React, { Component } from 'react';
-import { Content, List, ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
-import { BackHandler } from 'react-native';
-import { LargeList } from "react-native-largelist-v2";
-import {OptimizedFlatList} from 'react-native-optimized-flatlist'
+import { ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'native-base';
+import { BackHandler, ListView } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import Contacts from 'react-native-contacts';
 import { CATEGORY_FROMCONTACTS } from '@constants/title'
-import { gestureHandlerRootHOC } from 'react-native-gesture-handler'
-import Com from './component'
 class ListContact extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      dataContacts: [],
-      key: -1,
-      data: []
+      dataContacts: new ListView.DataSource({
+        rowHasChanged: (row1, row2) => row1.id !== row2.id,
+        sectionHeaderHasChanged: (s1, s2) => s1.title !== s2.title
+      }),
+      isLoading: true
     }
-    let { left, right } = props;
-
-    if (!left || !right) this.setParams()
-
+    this.props.navigation.setParams({ left: this.renderLeftHeader(), title: CATEGORY_FROMCONTACTS })
   }
-
+  capitalize = (s) => {
+    if (typeof s !== 'string') return ''
+    return s.charAt(0).toLowerCase() + s.slice(1)
+  }
   setContact = (dataContacts) => {
 
     let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
 
-    let data =  [...Array(26)].map((_, i) => (
-      {
-        title:String.fromCharCode('A'.charCodeAt(0) + i), items : []
-      } 
+    let data = [...Array(26)].map((_, i) => (
+      [{
+        title: String.fromCharCode('A'.charCodeAt(0) + i)
+      }]
     ));
-    data.push({title: "#", items: []})
-    dataContacts = dataContacts.forEach(e => {
-      let givenName = [e.givenName, e.middleName, e.familyName].filter(e => !!e).join(' ');
-      let index = arrayChar.indexOf(givenName.charAt(0).toUpperCase())
-      if( index === - 1) index = 26;
-      data[index].items.push( {
-        givenName,
+    data.push([{ title: "#" }])
+    dataContacts = dataContacts.sort((a, b) => this.capitalize(a.name).localeCompare(this.capitalize(b.name)));
+    dataContacts.forEach(e => {
+      let name = [e.givenName, e.middleName, e.familyName].filter(e => !!e).join(' ');
+      let index = arrayChar.indexOf(name.charAt(0).toUpperCase())
+      if (index === - 1) index = 26;
+      data[index].push({
+        firstName: [e.givenName, e.middleName].filter(e => !!e).join(' '),
+        lastName: e.familyName,
+        name,
         id: e.recordID,
-        thumbnailPath: e.thumbnailPath,
-        phoneNumbers: e.phoneNumbers
+        picture: !!e.thumbnailPath ? { uri: e.thumbnailPath } : "",
+        phone: e.phoneNumbers
       })
-      
     })
-    data = data.filter(e => e.items.length > 0)
-    this.setState({ dataContacts: data })
-  }
-
-  setParams = () => {
-    this.props.navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_FROMCONTACTS })
+    data = data.filter(e => e.length > 1);
+    this.setState({ dataContacts: this.state.dataContacts.cloneWithRowsAndSections(data), isLoading: false })
   }
 
   setBack = () => {
     this.props.navigation.goBack();
     return true;
   }
-
+  addContact = (item) => {
+    this.props.navigation.navigate('addContacts', {data: item})
+  }
   renderLeftHeader = () => {
     return (
       <Button transparent onPress={this.setBack}>
@@ -65,84 +63,63 @@ class ListContact extends Component {
       </Button>)
   }
 
-  renderRightHeader = () => {
-    return (this.state.key !== -1 ?
-      <Button transparent onPress={this.setBack}>
-        <Icon name='ios-checkmark-outline' style={{ fontSize: 40 }} />
-      </Button> :
-      <Text>
-      </Text>
-    )
-  }
-
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
 
     Contacts.getContactsMatchingString("", (err, dataContacts) => {
       if (err) throw err;
-      this.setState({dataContacts})
-      // this.setContact(dataContacts)
+      // this.setState({dataContacts})
+      this.setContact(dataContacts)
     })
   }
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this.setBack);
   }
-  componentDidUpdate(prevProps, prevState){
-    if(prevState.key !== this.state.key && this.state.key !== -1) this.setParams()
-  }
+
   capitalize = (s) => {
     if (typeof s !== 'string') return ''
     return s.charAt(0).toLowerCase() + s.slice(1)
   }
 
-  onPress = (key) => {
-    this.setState({ key });
-  }
-  
   renderSectionItem = (section) => {
-    let {dataContacts} = this.state
-    let item = dataContacts[section]
     return (
       <ListItem itemDivider>
-        <Text>{item.title}</Text>
-      </ListItem> 
+        <Text>{section[0].title}</Text>
+      </ListItem>
     )
   }
-  renderIndexItem = ({section, row}) => {
-    let {dataContacts} = this.state
-    let item = dataContacts[section].items[row]
-    return(
-    <ListItem
-    button onPress={() => this.onPress(item.id)}
-    noIndent
-    style={{ backgroundColor: item.id === this.state.key ? "#cde1f9" : '#fff' }}>
-    <Left style={{ flex: 1 }}>
-      <Thumbnail square source={!!item.thumbnailPath ? { uri: item.thumbnailPath } : require('@thumbnails/category/default-contact.png')} />
-    </Left>
-    <Body style={{ flex: 4 }}>
-      <Text>{item.givenName}</Text>
-      {item.phoneNumbers.length > 0 && item.phoneNumbers.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
-    </Body>
-  </ListItem>)
-  }
-  
-  render() {
-    let { dataContacts } = this.state;
-    console.log(dataContacts)
+  renderIndexItem = (item, sectionID, index) => {
+    if (index === "0") return null;
+    console.log(item.id === this.state.key)
     return (
-        dataContacts.length === 0 ? <Text>Đang lấy dữ liệu</Text> :
-          <Com onPress={this.onPress} key={this.state.key} dataContacts={dataContacts}/>
-        //   <LargeList
-        //   data={dataContacts}
-        //   heightForSection={() => 50}
-        //   renderSection={this.renderSectionItem}
-        //   heightForIndexPath={() => 80}
-        //   renderIndexPath={this.renderIndexItem}
-        // />
+      <ListItem noIndent>
+        <Left style={{ flex: 1 }}>
+          <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
+        </Left>
+        <Body style={{ flex: 4 }}>
+          <Text>{item.name}</Text>
+          {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
+        </Body>
+        <Right>
+          <Button onPress={ () => this.addContact(item)}>
+            <Icon name='arrow-back' />
+          </Button>
+        </Right>
+      </ListItem>
+    )
+  }
+
+  render() {
+    let { dataContacts, isLoading } = this.state;
+    return (
+      isLoading ? <Text>Đang lấy dữ liệu</Text> :
+        <ListView style={{ marginRight: 10 }}
+          dataSource={dataContacts}
+          renderRow={this.renderIndexItem}
+          renderSectionHeader={this.renderSectionItem}
+        />
     )
   }
 }
 
-// export default (ListContact);
 export default withNavigation(ListContact);
-

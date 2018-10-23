@@ -8,7 +8,7 @@ class AddContactForm extends Component {
     form: {
       firstName: "",
       lastName: "",
-      phone: "",
+      phone: [{number: ""}],
       address: "",
       picture: "",
       email: "",
@@ -44,6 +44,13 @@ class AddContactForm extends Component {
       form: { ...this.state.form, [name]: e }
     })
   }
+  changePhone = (e, index) => {
+    let phone = [...this.state.form.phone];
+    phone[index] = { number : e }
+    this.setState({
+      form: { ...this.state.form, phone }
+    })
+  }
   render() {
     let { firstName, lastName, phone, address, picture, email, zalo, fb } = this.state.form;
     return (
@@ -69,11 +76,16 @@ class AddContactForm extends Component {
 
         </View>
 
-
-        <Item floatingLabel>
-          <Label>SDT</Label>
-          <Input value={phone} onChangeText={e => this.changeInput(e, 'phone')} />
-        </Item>
+        {phone.map( (e, key) =>{
+          
+          return(
+            <Item floatingLabel key={key}>
+              <Label>SDT { key === 0 ? '': key + 1 }</Label>
+              <Input value={phone[key].number} onChangeText={e => this.changePhone(e, key)}/>
+            </Item>
+          )}
+         )}
+       
         <Item floatingLabel>
           <Label>Địa chỉ</Label>
           <Input value={address} onChangeText={e => this.changeInput(e, 'address')} />

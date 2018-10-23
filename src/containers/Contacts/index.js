@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, ListView } from 'react-native';
 import firebase from 'react-native-firebase';
-import { View, Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail, SwipeRow, Content } from 'native-base';
+import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail, SwipeRow, Content } from 'native-base';
 import { withNavigation  } from 'react-navigation';
 import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 import { CATEGORY_CONTACTS } from '@constants/title'
-import { NativeLargeList }from "react-native-largelist-v2";
 
 class List extends Component {
 
   constructor(props) {
     super(props);
     let { uid } = firebase.auth().currentUser._user;
-    let { left, right, navigation } = props;
+    let { navigation } = props;
     
-    if (!left || !right) navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
+    navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
     this.ref = firebase.firestore().collection('contacts');
 
     this.state = {
       uid,
-      dataContacts: []
+      dataContacts:  new ListView.DataSource({
+        rowHasChanged           : (row1, row2) => row1.id !== row2.id,
+        sectionHeaderHasChanged : (s1, s2) => s1.title !== s2.title
+      }),
+      isLoading: true
     }
   }
 
@@ -67,24 +70,25 @@ class List extends Component {
   onCollectionUpdate = (querySnapshot) => {
     let dataContacts = [];
     let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
+
     let data =  [...Array(26)].map((_, i) => (
-      {
-        title:String.fromCharCode('A'.charCodeAt(0) + i), items : []
-      } 
+      [{
+        title:String.fromCharCode('A'.charCodeAt(0) + i)
+      }]
     ));
-    data.push({title: "#", items: []})
+    data.push( [{ title: "#"}] )
     querySnapshot.forEach((e) => {
       let name = [e.data().firstName, e.data().lastName].filter(e => !!e).join(' ');
       let index = arrayChar.indexOf(name.charAt(0).toUpperCase())
       if( index === - 1) index = 26;
-      data[index].items.push(
+      data[index].push(
         {...e.data(), id: e.id, name}
       )   
     });
     
-    data = data.filter(e => e.items.length > 0)
+    data = data.filter(e => e.length > 1)
     this.setState({
-      dataContacts: data
+      dataContacts: this.state.dataContacts.cloneWithRowsAndSections(data), isLoading: false
     });
   }
   componentWillUnmount() {
@@ -94,60 +98,39 @@ class List extends Component {
   }
 
   renderSectionItem = (section) => {
-    let {dataContacts} = this.state
-    let item = dataContacts[section]
     return (
       <ListItem itemDivider>
-        <Text>{item.title}</Text>
+        <Text>{section[0].title}</Text>
       </ListItem> 
     )
   }
-  renderIndexItem = ({section, row}) => {
-    let {dataContacts} = this.state
-    let item = dataContacts[section].items[row]
-    let coreItem = this.renderCoreIndexItem(item);
+  renderIndexItem = (item, sectionID, index) => {
+    if(index === "0") return null;
     return(
       <ListItem
-      button onPress={() => this.onPress(item.id)}
-      noIndent
-      >
-      <Left style={{ flex: 1 }}>
-        <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
-      </Left>
-      <Body style={{ flex: 4 }}>
-        <Text>{item.name}</Text>
-        {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
-      </Body>
-    </ListItem>
+        button onPress={() => this.onPress(item.id)}
+        noIndent
+        >
+        <Left style={{ flex: 1 }}>
+          <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
+        </Left>
+        <Body style={{ flex: 4 }}>
+          <Text>{item.name}</Text>
+          { item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
+        </Body>
+      </ListItem>
     )
   }
-  renderCoreIndexItem = (item) => (
-    <ListItem
-      button onPress={() => this.onPress(item.id)}
-      noIndent
-      >
-      <Left style={{ flex: 1 }}>
-        <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
-      </Left>
-      <Body style={{ flex: 4 }}>
-        <Text>{item.name}</Text>
-        {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
-      </Body>
-    </ListItem>
-  )
+  
   render() {
-
-    let { dataContacts } = this.state;
-
+    let { dataContacts, isLoading } = this.state;
     return (
-      dataContacts.length === 0 ? <Text>Đang lấy dữ liệu</Text> :
-        <NativeLargeList
-          data={dataContacts}
-          heightForSection={() => 50}
-          renderSection={this.renderSectionItem}
-          heightForIndexPath={() => 80}
-          renderIndexPath={this.renderIndexItem}
-        />
+      isLoading ? <Text>Đang lấy dữ liệu</Text> :
+      <ListView style= {{ marginRight: 10}}
+        dataSource={dataContacts}
+        renderRow={this.renderIndexItem}
+        renderSectionHeader={this.renderSectionItem}
+      />
     )
   }
 }
