@@ -5,7 +5,14 @@ import LoginContainer from '@containers/Auth/login-container'
 import RegisterContainer from '@containers/Auth/register-container'
 import ForgotPasswordContainer from '@containers/Auth/forgot-password-container'
 import Content from '@components/Content/Content'
-import { Dashboard, List, Contacts, ListContact, AddContact } from '@containers'
+import { 
+  Dashboard, 
+  List, 
+  Contacts, 
+  ListContact, 
+  AddContact, 
+  Types,
+  AddTypes } from '@containers'
 
 const Screen = (Child ) => (<Content><Child/></Content>)
 
@@ -18,7 +25,9 @@ const scenes = createStackNavigator( {
   list: ()=>Screen(List),
   contacts: ()=>Screen(Contacts),
   listContacts: ()=>Screen(ListContact),
-  addContacts: ()=>Screen(AddContact)
+  addContacts: ()=>Screen(AddContact),
+  types: ()=>Screen(Types),
+  addTypes: ()=>Screen(AddTypes),
 },
 {
   headerMode: 'none',

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import {View, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
-import { CATEGORY_CONTACTS } from '@constants/title'
+import { CATEGORY_CONTACTS, CATEGORY_TYPES } from '@constants/title'
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 
@@ -16,21 +16,28 @@ class List extends Component {
     BackHandler.removeEventListener('hardwareBackPress', this.setBack);
   }
   render() {
+    let menu = [
+      { navigate: 'contacts', thumbnails: require('@thumbnails/category/Contacts.png'), title: CATEGORY_CONTACTS },
+      { navigate: 'types', thumbnails: require('@thumbnails/category/Contacts.png'), title: CATEGORY_TYPES },
+    ]
      return (
       <View>
         <Card>
-          <CardItem button 
-          onPress={()=> this.props.navigation.navigate( 'contacts', { preRoute: 'list' }) }
-          >
-            <Left>
-              <Thumbnail square source={require('@thumbnails/category/Contacts.png')} />
-              <Body>
-                <Text>{ CATEGORY_CONTACTS }</Text>
+          {menu.map( (e, key) =>
+            <CardItem key={key} button 
+            onPress={()=> this.props.navigation.navigate( e.navigate, { preRoute: 'list' }) }
+            >
+              <Left>
+                { !!e. thumbnails && <Thumbnail square source={e.thumbnails} />}
+                <Body>
+                  <Text>{ e.title }</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          )}
 
-              </Body>
-            </Left>
-          </CardItem>
         </Card>
+          
 
       </View>
     )

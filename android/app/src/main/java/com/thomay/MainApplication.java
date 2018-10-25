@@ -3,18 +3,15 @@ package com.thomay;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.imagepicker.ImagePickerPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.rt2zz.reactnativecontacts.ReactNativeContacts;
-import com.microsoft.codepush.react.CodePush;
-
 import com.imagepicker.ImagePickerPackage;
 import com.rt2zz.reactnativecontacts.ReactNativeContacts;
 import io.invertase.firebase.RNFirebasePackage;
 import io.invertase.firebase.auth.RNFirebaseAuthPackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage;
+import io.invertase.firebase.storage.RNFirebaseStoragePackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.microsoft.codepush.react.CodePush;
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
@@ -46,20 +43,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new PickerPackage(),
             new VectorIconsPackage(),
-            new ImagePickerPackage(),
-            new RNFirebasePackage(),
-            new RNDeviceInfo(),
             new ReactNativeContacts(),
-            new CodePush(null, getApplicationContext(), BuildConfig.DEBUG),
-
-
-
             new ImagePickerPackage(),
-            new ReactNativeContacts(),
             new RNFirebasePackage(),
             new RNFirebaseAuthPackage(),
             new RNFirebaseFirestorePackage(),
+            new RNFirebaseStoragePackage(),
             new RNDeviceInfo(),
             new CodePush(getResources().getString(R.string.reactNativeCodePush_androidDeploymentKey), getApplicationContext(), BuildConfig.DEBUG),
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),

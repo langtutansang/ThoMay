@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StackActions, NavigationActions } from 'react-navigation';
+import { StackActions, NavigationActions, withNavigation } from 'react-navigation';
 
 import { Button, Text, View } from 'native-base';
 import firebase from 'react-native-firebase';
@@ -23,7 +23,6 @@ class Dashboard extends Component {
           actions: [NavigationActions.navigate({ routeName: 'login' })],
         });
         this.props.navigation.dispatch(loginAction);
-        
       }
     );
   }
@@ -43,4 +42,4 @@ class Dashboard extends Component {
     )
   }
 }
-export default Dashboard;
+export default withNavigation(Dashboard);

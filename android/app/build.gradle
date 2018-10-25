@@ -110,6 +110,7 @@ android {
             abiFilters "armeabi-v7a", "x86"
         }
         multiDexEnabled true
+        vectorDrawables.useSupportLibrary = true
     }
     signingConfigs {
         release {
@@ -152,12 +153,10 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
+    compile project(':react-native-image-crop-picker')
     implementation project(':react-native-vector-icons')
-    implementation project(':react-native-image-picker')
     implementation project(':react-native-firebase')
-    implementation project(':react-native-device-info')
-    implementation project(':react-native-contacts')
-    implementation project(':react-native-code-push')
     implementation project(':appcenter-crashes')
     implementation project(':appcenter-analytics')
     implementation project(':appcenter')
@@ -170,13 +169,13 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
     
-    implementation project(':react-native-firebase')
 
   // Firebase dependencies
     implementation "com.google.android.gms:play-services-base:16.0.1"
     implementation "com.google.firebase:firebase-core:16.0.4"
     implementation "com.google.firebase:firebase-auth:16.0.4"
     implementation "com.google.firebase:firebase-firestore:17.1.1"
+    implementation "com.google.firebase:firebase-storage:16.0.2"
 }
 
 // Run this once to be able to run the application with BUCK

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { BackHandler, ListView } from 'react-native';
 import firebase from 'react-native-firebase';
-import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail, SwipeRow, Content } from 'native-base';
+import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail } from 'native-base';
 import { withNavigation  } from 'react-navigation';
 import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 import { CATEGORY_CONTACTS } from '@constants/title'
@@ -68,7 +68,6 @@ class List extends Component {
     this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
   }
   onCollectionUpdate = (querySnapshot) => {
-    let dataContacts = [];
     let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
 
     let data =  [...Array(26)].map((_, i) => (
@@ -111,13 +110,13 @@ class List extends Component {
         button onPress={() => this.onPress(item.id)}
         noIndent
         >
-        <Left style={{ flex: 1 }}>
-          <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
-        </Left>
-        <Body style={{ flex: 4 }}>
-          <Text>{item.name}</Text>
-          { item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
-        </Body>
+          <Left style={{ flex: 1 }}>
+            <Thumbnail square source={!!item.picture ? { uri: item.picture } : require('@thumbnails/category/default-contact.png')} />
+          </Left>
+          <Body style={{ flex: 4 }}>
+            <Text>{item.name}</Text>
+            { item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele}</Text>)}
+          </Body>
       </ListItem>
     )
   }

@@ -41,8 +41,8 @@ class ListContact extends Component {
         lastName: e.familyName,
         name,
         id: e.recordID,
-        picture: !!e.thumbnailPath ? { uri: e.thumbnailPath } : "",
-        phone: e.phoneNumbers
+        picture:  e.thumbnailPath,
+        phone: e.phoneNumbers.map(e => e.number)
       })
     })
     data = data.filter(e => e.length > 1);
@@ -92,19 +92,14 @@ class ListContact extends Component {
     if (index === "0") return null;
     console.log(item.id === this.state.key)
     return (
-      <ListItem noIndent>
+      <ListItem noIndent button onPress={ () => this.addContact(item)}>
         <Left style={{ flex: 1 }}>
-          <Thumbnail square source={!!item.picture ? item.picture : require('@thumbnails/category/default-contact.png')} />
+          <Thumbnail square source={!!item.picture ? { uri: item.picture }: require('@thumbnails/category/default-contact.png')} />
         </Left>
         <Body style={{ flex: 4 }}>
           <Text>{item.name}</Text>
-          {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele.number}</Text>)}
+          {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele}</Text>)}
         </Body>
-        <Right>
-          <Button onPress={ () => this.addContact(item)}>
-            <Icon name='arrow-back' />
-          </Button>
-        </Right>
       </ListItem>
     )
   }
