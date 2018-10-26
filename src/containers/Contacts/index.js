@@ -1,31 +1,33 @@
 import React, { Component } from 'react';
-import { BackHandler } from 'react-native';
+import { BackHandler, ListView } from 'react-native';
 import firebase from 'react-native-firebase';
-import { View, Text, Button, Icon, ActionSheet } from 'native-base';
-import { checkReadContact, requestReadContact } from '@components/Permission/contacts';
+import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail } from 'native-base';
 import { withNavigation  } from 'react-navigation';
 import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 import { CATEGORY_CONTACTS } from '@constants/title'
+import Loading from '@components/Loading';
 
 class List extends Component {
 
   constructor(props) {
     super(props);
-    let { uid } = firebase.auth().currentUser._user;
-    let { left, right, navigation } = props;
+    let { navigation } = props;
     
-    if (!left || !right) navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
+    navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
     this.ref = firebase.firestore().collection('contacts');
-
+    this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
-      uid,
-      dataContacts: []
+      dataContacts:  new ListView.DataSource({
+        rowHasChanged           : (row1, row2) => row1.id !== row2.id,
+        sectionHeaderHasChanged : (s1, s2) => s1.title !== s2.title
+      }),
+      isLoading: true
     }
   }
 
   showMenuContact = () => {
     var BUTTONS = [
-      { text: 'Tạo mới', screen: () => this.props.navigation.navigate('insertContact',{ preRoute: 'list' }) },
+      { text: 'Tạo mới', screen: () => this.props.navigation.navigate('addContacts',{ preRoute: 'list' }) },
       { text: 'Lấy từ danh bạ', screen: () => this.props.navigation.navigate('listContacts',{ preRoute: 'list' })} 
     ];
     ActionSheet.show(
@@ -50,48 +52,41 @@ class List extends Component {
 
   renderRightHeader = () => {
     return (
-      <Button transparent onPress={this.showContactDevice}>
+      <Button transparent onPress={this.showMenuContact}>
         <Icon name='ios-contacts' />
       </Button>
     )
   }
 
-  showContactDevice = () => {
-
-    checkReadContact()
-      .then(
-        res => {
-          if (res) this.showMenuContact()
-          else
-            requestReadContact()
-              .then(res => {
-                if (res) this.showMenuContact()
-              })
-              .catch(err => console.log(err))
-        }
-      )
-      .catch(
-        err => console.log(err)
-      )
-  }
   setBack = () => {
     this.props.navigation.navigate('list')
     return true;
   }
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress',this.setBack);
-    this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
+    this.unsubscribe = this.ref.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdate)
   }
   onCollectionUpdate = (querySnapshot) => {
-    const dataContacts = [];
+    let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
+
+    let data =  [...Array(26)].map((_, i) => (
+      [{
+        title:String.fromCharCode('A'.charCodeAt(0) + i)
+      }]
+    ));
+    data.push( [{ title: "#"}] )
     querySnapshot.forEach((e) => {
-      let { name } = e.data();
-      dataContacts.push({
-        name,
-      });
+      let name = [e.data().firstName, e.data().lastName].filter(e => !!e).join(' ');
+      let index = arrayChar.indexOf(name.charAt(0).toUpperCase())
+      if( index === - 1) index = 26;
+      data[index].push(
+        {...e.data(), id: e.id, name}
+      )   
     });
+    
+    data = data.filter(e => e.length > 1)
     this.setState({
-      dataContacts
+      dataContacts: this.state.dataContacts.cloneWithRowsAndSections(data), isLoading: false
     });
   }
   componentWillUnmount() {
@@ -99,17 +94,41 @@ class List extends Component {
     this.unsubscribe();
 
   }
-  render() {
 
-    let { dataContacts } = this.state;
-
+  renderSectionItem = (section) => {
     return (
-      <View>
-        <Button transparent onPress={this.showMenuContact}>
-          <Icon name='arrow-back' />
-        </Button>
-        {dataContacts.map((e, key) => <Text key={key}>{e.name}</Text>)}
-      </View>
+      <ListItem itemDivider>
+        <Text>{section[0].title}</Text>
+      </ListItem> 
+    )
+  }
+  renderIndexItem = (item, sectionID, index) => {
+    if(index === "0") return null;
+    return(
+      <ListItem
+        button onPress={() => this.onPress(item.id)}
+        noIndent
+        >
+          <Left style={{ flex: 1 }}>
+            <Thumbnail square source={!!item.picture ? { uri: item.picture } : require('@thumbnails/category/default-contact.png')} />
+          </Left>
+          <Body style={{ flex: 4 }}>
+            <Text>{item.name}</Text>
+            { item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele}</Text>)}
+          </Body>
+      </ListItem>
+    )
+  }
+  
+  render() {
+    let { dataContacts, isLoading } = this.state;
+    return (
+      isLoading ? <Loading/> :
+      <ListView style= {{ marginRight: 10}}
+        dataSource={dataContacts}
+        renderRow={this.renderIndexItem}
+        renderSectionHeader={this.renderSectionItem}
+      />
     )
   }
 }

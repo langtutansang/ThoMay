@@ -4,9 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import firebase from 'react-native-firebase';
 import { withNavigation  } from 'react-navigation';
 import navigateReset from '@components/Navigate';
-
 import Divider from '@components/Divider'
-
 import styles from './styles';
 
 class Login extends Component {
@@ -26,12 +24,12 @@ class Login extends Component {
 
     self.setState({ isLogin: true })
     firebase.auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
-      .then(function(){   
+      .then( () =>{
         self.setState({ isLogin: false }, self.navigateHome
         )
        
       })
-      .catch(function (error) {
+      .catch( (error) => {
         ToastAndroid.showWithGravity(
           error.message,
           ToastAndroid.SHORT,
@@ -46,7 +44,8 @@ class Login extends Component {
 
     self.setState({ isLoginAnonymous: true })
     firebase.auth().signInAnonymouslyAndRetrieveData()
-    .then(function(){
+    .then(() =>{
+
       self.setState({ isLoginAnonymous: false }, 
         self.navigateHome
       )

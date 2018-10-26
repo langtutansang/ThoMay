@@ -9,6 +9,7 @@
     "app-code-push": "code-push release-react MayDo android -d Production -m --description 'cap nhat'",
     "chay": "react-native run-android",
     "build-android": "cd android && gradlew assembleRelease",
+    "clear-cache": "rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro-* && rm -rf $TMPDIR/haste-* && npm cache clean --force && npm cache verify && rm -rf android/build && rm -rf node_modules/ && npm install",
     "test": "jest"
   },
   "dependencies": {
@@ -24,20 +25,20 @@
     "react-native-animatable": "^1.3.0",
     "react-native-code-push": "^5.4.2",
     "react-native-contacts": "^2.2.3",
-    "react-native-device-info": "^0.22.5",
+    "react-native-device-info": "^0.24.3",
     "react-native-firebase": "^4.3.8",
-    "react-native-gesture-handler": "^1.0.7",
     "react-native-icon-badge": "^1.1.3",
-    "react-native-largelist-v2": "^2.1.0",
+    "react-native-image-crop-picker": "^0.21.2",
     "react-native-permissions": "^1.1.1",
     "react-native-popup-dialog": "^0.15.0",
+    "react-native-progress": "^3.5.0",
     "react-native-simple-dialogs": "^0.4.1",
-    "react-native-spring-scrollview": "^0.0.24",
     "react-native-vector-icons": "^5.0.0",
     "react-navigation": "^2.17.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
+    "rn-fetch-blob": "^0.10.13",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
@@ -51,6 +52,7 @@
   "jest": {
     "preset": "react-native",
     "setupFiles": [
+      "<rootDir>/node_modules/appcenter-analytics/test/AppCenterAnalyticsMock.js",
       "<rootDir>\\node_modules\\appcenter\\test\\AppCenterMock.js",
       "<rootDir>\\node_modules\\appcenter-analytics\\test\\AppCenterAnalyticsMock.js",
       "<rootDir>\\node_modules\\appcenter-crashes\\test\\AppCenterCrashesMock.js",

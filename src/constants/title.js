@@ -6,3 +6,8 @@ export const TITLE_OTHER = 'Khác';
 
 export const CATEGORY_CONTACTS = 'Danh bạ';
 export const CATEGORY_FROMCONTACTS = 'Lấy từ';
+export const CATEGORY_ADDCONTACTS = 'Thêm mới';
+export const CATEGORY_TYPES = 'Loại đồ';
+export const CATEGORY_ADDTYPES = 'Thêm loại đồ';
+export const CATEGORY_MEASURES = 'Loại số đo';
+

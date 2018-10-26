@@ -3240,6 +3240,18 @@ glob-parent@^2.0.0:
   dependencies:
     is-glob "^2.0.0"
 
+glob@7.0.6:
+  version "7.0.6"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.0.6.tgz#211bafaf49e525b8cd93260d14ab136152b3f57a"
+  integrity sha1-IRuvr0nlJbjNkyYNFKsTYVKz9Xo=
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
+    minimatch "^3.0.2"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
 glob@^5.0.15:
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/glob/-/glob-5.0.15.tgz#1bc936b9e02f4a603fcc222ecf7633d30b8b93b1"
@@ -5123,7 +5135,7 @@ min-document@^2.19.0:
   dependencies:
     dom-walk "^0.1.0"
 
-"minimatch@2 || 3", minimatch@^3.0.3, minimatch@^3.0.4:
+"minimatch@2 || 3", minimatch@^3.0.2, minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.0.4.tgz#5166e286457f03306064be5497e8dbb0c3d32083"
   integrity sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA==
@@ -6492,10 +6504,10 @@ react-native-contacts@^2.2.3:
   resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.3.tgz#7b229d484f41a4ed1dd6cd186dc6106c9a5edfcd"
   integrity sha512-xrFO2YQ7L8InzREcTb0UD0ljiWqsdRWf/Fn1ULNCFEyMV4OgaHfr97gGKG844lP6ndmwd9lv2wpEzKCCw0SylQ==
 
-react-native-device-info@^0.22.5:
-  version "0.22.5"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.22.5.tgz#9b1882cbb030f2926cff77336e7cd2e87edf52bf"
-  integrity sha512-Pe+7eoWOR/TmZxWLaa8rmEmqRckyvPnniDXjiKxaUSk5oUCCtHjFajVYSVkWoJGPwd4xQYjrhx1gr/tcvjSEwQ==
+react-native-device-info@^0.24.3:
+  version "0.24.3"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.24.3.tgz#f15eff8d09fe418eaf5e7c89ddaabbc5ed718fd7"
+  integrity sha512-usW00Wk6DoXH1eRSMt07j0uYvuka3SIEnJ9girlddAacyqwfa1QMVTN4eYmtaBzuMd/avhis8iHZQ3cLaR9CMA==
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
@@ -6540,19 +6552,15 @@ react-native-firebase@^4.3.8:
     postinstall-build "^5.0.1"
     prop-types "^15.6.1"
 
-react-native-gesture-handler@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.0.7.tgz#86677c709c42d04555210cad9759b09e2c657720"
-  integrity sha512-lu4RizR3iBJ6qq8UfcHQKbf+HaiQHMGaQPSMSy8i7ij6tsOxatKuzxuEZRMblQ2Ma7op4CpfssD29yo1AjI7PQ==
-  dependencies:
-    hoist-non-react-statics "^2.3.1"
-    invariant "^2.2.2"
-    prop-types "^15.5.10"
-
 react-native-icon-badge@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/react-native-icon-badge/-/react-native-icon-badge-1.1.3.tgz#43de0c923afe4968dfcff127ec5c57057b16f787"
   integrity sha1-Q94Mkjr+SWjfz/En7FxXBXsW94c=
+
+react-native-image-crop-picker@^0.21.2:
+  version "0.21.2"
+  resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.2.tgz#f0e7ad4615f1f7c79ba25e2e7708042e306d258e"
+  integrity sha512-dJwEe4piQUklAOATGefFCh4GvIYnLSrnQxeADbHXHyzVCuP6YuTxXxxsvYLTLrnTOvnif58TQ+s4fZVQIScSSw==
 
 react-native-iphone-x-helper@^1.0.1:
   version "1.1.0"
@@ -6567,11 +6575,6 @@ react-native-keyboard-aware-scroll-view@0.5.0:
     prop-types "^15.6.0"
     react-native-iphone-x-helper "^1.0.1"
 
-react-native-largelist-v2@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-largelist-v2/-/react-native-largelist-v2-2.1.0.tgz#fe7bc0ac7a34ff526a74b88ee1428a44ae7add95"
-  integrity sha512-bO02LY+AFWVDpR+hPAxhfNO60Aha4evuRUeWsQWShZ0jlMuU4VSQePkjtPDlqJ91dnA44GFyRUMZTyb4Up65uA==
-
 react-native-permissions@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-1.1.1.tgz#4876004681ff8556454613d85249b01baff9b35b"
@@ -6584,6 +6587,13 @@ react-native-popup-dialog@^0.15.0:
   dependencies:
     babel-plugin-flow-react-proptypes "^9.1.1"
     prop-types "^15.6.0"
+
+react-native-progress@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/react-native-progress/-/react-native-progress-3.5.0.tgz#d1ccc7f96dc17c609aedb43b2e6695d67deae0ec"
+  integrity sha512-Tgc002D0BGes1fTlObu/qNItlsTPYKFrF9XRQaJLme77TNxNX9I04sgIz3kaq8O4R+z/jlai64dk1HDEDQhzMA==
+  dependencies:
+    prop-types "^15.5.8"
 
 react-native-safe-area-view@0.11.0:
   version "0.11.0"
@@ -6601,11 +6611,6 @@ react-native-simple-dialogs@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/react-native-simple-dialogs/-/react-native-simple-dialogs-0.4.1.tgz#313c264680ba8a33545b37eae46926a3c4824553"
   integrity sha512-FK4Rx2P1iY1EcwhjbkzaApBp3JrjuNiYtAZwl6dFsIAN4Aa1KHqEeLukjEUgQpqy2HWiw5+vaumJtsZdCUCDuQ==
-
-react-native-spring-scrollview@^0.0.24:
-  version "0.0.24"
-  resolved "https://registry.yarnpkg.com/react-native-spring-scrollview/-/react-native-spring-scrollview-0.0.24.tgz#a1d74cbd844a038be279a41efb299b5e194f262c"
-  integrity sha512-AfBs9aiUSa4aU+YaVNPgAkrjYZNL998AK2HBjFzscqSQTmnQQsUW+Mv7BrovQr079Jj/2Qq5B1XL/eH9AoNB8A==
 
 react-native-tab-view@^0.0.77:
   version "0.0.77"
@@ -7232,6 +7237,14 @@ rimraf@~2.2.6:
   version "2.2.8"
   resolved "http://registry.npmjs.org/rimraf/-/rimraf-2.2.8.tgz#e439be2aaee327321952730f99a8929e4fc50582"
   integrity sha1-5Dm+Kq7jJzIZUnMPmaiSnk/FBYI=
+
+rn-fetch-blob@^0.10.13:
+  version "0.10.13"
+  resolved "https://registry.yarnpkg.com/rn-fetch-blob/-/rn-fetch-blob-0.10.13.tgz#e0fd5eac1a3a872563b35061353d96c4e51ae1cc"
+  integrity sha512-CEz7coPlMMUpX5RB+k7Mqzq+eYYfZuFbpuNkFYhvEFnT5DnZyqdNF50Xk6BuZyqZwAjNvsQ1CUMz7XDvuN10DA==
+  dependencies:
+    base-64 "0.1.0"
+    glob "7.0.6"
 
 rn-host-detect@^1.0.1:
   version "1.1.5"

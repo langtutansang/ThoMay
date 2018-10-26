@@ -9,9 +9,7 @@ class Content extends Component {
     return (
       <Container>
         <HeaderComponent/>
-        <ContentBase>
           {children}
-        </ContentBase>
         <FooterComonent/>     
       </Container>
     );

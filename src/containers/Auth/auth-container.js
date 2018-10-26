@@ -4,7 +4,6 @@ import Background from '@components/Background'
 
 import firebase from 'react-native-firebase';
 import styles from './styles';
-
 import navigateReset from '@components/Navigate';
 
 class AuthContainer extends Component {
@@ -13,7 +12,7 @@ class AuthContainer extends Component {
   componentDidMount(){
     let { navigation } = this.props;
     this.unsubscriber = firebase.auth().onAuthStateChanged((user) => {
-      navigateReset( this.props.navigation, !user ? 'login' : 'home')
+      navigateReset( navigation, !user ? 'login' : 'home')
     });
   }
   componentWillUnmount(){
