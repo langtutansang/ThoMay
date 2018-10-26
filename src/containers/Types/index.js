@@ -5,18 +5,16 @@ import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 import { CATEGORY_TYPES } from '@constants/title'
 import firebase from 'react-native-firebase';
+import Loading from '@components/Loading';
 
 class Types extends Component {
   constructor(props) {
     super(props);
-    let { uid } = firebase.auth().currentUser._user;
     let { navigation } = props;
-    
     navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_TYPES })
     this.ref = firebase.firestore().collection('types');
-
+    this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
-      uid,
       isLoading: true
     }
   }
@@ -38,22 +36,35 @@ class Types extends Component {
   renderRightHeader = () => {
     return (
       <Button transparent onPress={this.addTypes}>
-        <Icon name='ios-contacts' />
+        <Icon name='ios-add-circle' />        
       </Button>
     )
   }
   componentDidMount() {
+    this.unsubscribe = this.ref.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdate)
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
   }
   componentWillUnmount() {
+    this.unsubscribe();
     BackHandler.removeEventListener('hardwareBackPress', this.setBack);
   }
-  renderContent = ({ content: data, des }) => (
-    (data instanceof Array) === true && data.length > 0 ?
-      <Content padder>
-        {des}
+  sortArray = ( data, parentId = "") => data.filter(e => e.parent === parentId).map( e=> ( {...e, content: this.sortArray(data, e.id)}) )
+  onCollectionUpdate = (querySnapshot) => {
+    let dataTypes = [];
+    querySnapshot.forEach((e) => {
+      dataTypes.push({...e.data(), id: e.id, content: [] });
+    });
+    dataTypes = this.sortArray(dataTypes);
+    console.log(dataTypes)
+    this.setState({dataTypes, isLoading: false})
+  }
+  
+  renderContent = ({ content, des }) => (
+    (content instanceof Array) === true && content.length > 0 ?
+      <Content style={{paddingLeft: 10, paddingBottom: 10}}>
+        {this.renderDes(des)}
         <Accordion
-          dataArray={data}
+          dataArray={content}
           renderContent={this.renderContent}
         />
 
@@ -67,22 +78,13 @@ class Types extends Component {
     return <Text style={{marginBottom: 5}}>{data}</Text>
   }
   render() {
-    let arr =
-      [
-        { title: '123', des:  this.renderDes('sang'), content: 'Sang' },
-        {
-          title: '123', des: this.renderDes('sang'), content:
-            [
-              { title: '123', content: '', des: 'sang' },
-              { title: '123', content: '', des: 'sang' },
-            ]
-        }
-
-      ];
+    let { isLoading, dataTypes} = this.state;
+  
     return (
+      isLoading ? <Loading/> : 
       <Content padder>
         <Accordion
-          dataArray={arr}
+          dataArray={dataTypes}
 
           renderContent={this.renderContent}
         />

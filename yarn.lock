@@ -6504,10 +6504,10 @@ react-native-contacts@^2.2.3:
   resolved "https://registry.yarnpkg.com/react-native-contacts/-/react-native-contacts-2.2.3.tgz#7b229d484f41a4ed1dd6cd186dc6106c9a5edfcd"
   integrity sha512-xrFO2YQ7L8InzREcTb0UD0ljiWqsdRWf/Fn1ULNCFEyMV4OgaHfr97gGKG844lP6ndmwd9lv2wpEzKCCw0SylQ==
 
-react-native-device-info@^0.22.5:
-  version "0.22.5"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.22.5.tgz#9b1882cbb030f2926cff77336e7cd2e87edf52bf"
-  integrity sha512-Pe+7eoWOR/TmZxWLaa8rmEmqRckyvPnniDXjiKxaUSk5oUCCtHjFajVYSVkWoJGPwd4xQYjrhx1gr/tcvjSEwQ==
+react-native-device-info@^0.24.3:
+  version "0.24.3"
+  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.24.3.tgz#f15eff8d09fe418eaf5e7c89ddaabbc5ed718fd7"
+  integrity sha512-usW00Wk6DoXH1eRSMt07j0uYvuka3SIEnJ9girlddAacyqwfa1QMVTN4eYmtaBzuMd/avhis8iHZQ3cLaR9CMA==
 
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
@@ -6561,11 +6561,6 @@ react-native-image-crop-picker@^0.21.2:
   version "0.21.2"
   resolved "https://registry.yarnpkg.com/react-native-image-crop-picker/-/react-native-image-crop-picker-0.21.2.tgz#f0e7ad4615f1f7c79ba25e2e7708042e306d258e"
   integrity sha512-dJwEe4piQUklAOATGefFCh4GvIYnLSrnQxeADbHXHyzVCuP6YuTxXxxsvYLTLrnTOvnif58TQ+s4fZVQIScSSw==
-
-react-native-image-picker@^0.27.1:
-  version "0.27.1"
-  resolved "https://registry.yarnpkg.com/react-native-image-picker/-/react-native-image-picker-0.27.1.tgz#32877c667e8c2713466fe178a6c7dd648e6cb5d3"
-  integrity sha512-LuEt5I9TFe3+lfN8E9geuN2OOgnld0QmeHRPTCV+mzkT5zASsoibNIUItt6WQBWG4nXC/90aufQYZn92i3lTxw==
 
 react-native-iphone-x-helper@^1.0.1:
   version "1.1.0"

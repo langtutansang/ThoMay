@@ -12,7 +12,8 @@ import {
   ListContact, 
   AddContact, 
   Types,
-  AddTypes } from '@containers'
+  AddTypes,
+  Measures } from '@containers'
 
 const Screen = (Child ) => (<Content><Child/></Content>)
 
@@ -28,6 +29,7 @@ const scenes = createStackNavigator( {
   addContacts: ()=>Screen(AddContact),
   types: ()=>Screen(Types),
   addTypes: ()=>Screen(AddTypes),
+  measures: ()=>Screen(Measures),
 },
 {
   headerMode: 'none',

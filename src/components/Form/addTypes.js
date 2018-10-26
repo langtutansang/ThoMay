@@ -4,13 +4,6 @@ import * as Progress from 'react-native-progress';
 class FormAddTypes extends Component {
   constructor(props){
     super(props);
-    this.data= []
-
-    props.dataTypes.filter(e=> e.parent === "").forEach(
-      e=> {
-        this.sortArray(e, "")
-      }
-    )
     this.state = {
       form: {
         title: '',
@@ -18,7 +11,7 @@ class FormAddTypes extends Component {
         parent: "",
         ...this.props.form
       },
-    }
+    };
   }
   
   saveInfo = () => {
@@ -37,13 +30,7 @@ class FormAddTypes extends Component {
       form: { ...this.state.form, [name]: e }
     })
   }
-  sortArray = (sort, space) => {
-    
-    this.data = [...this.data, {...sort,title: space + sort.title }];
-    this.props.dataTypes.filter(e => e.parent === sort.id).map( e=>{
-      this.sortArray(e, space + "  ");
-    })
-  }
+  
   render() {
     let { title, parent, des } = this.state.form;
     let { isLoading, dataTypes } = this.props;
@@ -67,7 +54,7 @@ class FormAddTypes extends Component {
           >
             <Picker.Item label="Không thuộc" value="" />
 
-            {this.data.map( (e, key) => 
+            {dataTypes.map( (e, key) => 
               <Picker.Item key={key} label={e.title} value={e.id} />
             )}
           </Picker>

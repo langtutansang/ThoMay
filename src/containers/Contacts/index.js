@@ -5,19 +5,18 @@ import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail } from
 import { withNavigation  } from 'react-navigation';
 import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 import { CATEGORY_CONTACTS } from '@constants/title'
+import Loading from '@components/Loading';
 
 class List extends Component {
 
   constructor(props) {
     super(props);
-    let { uid } = firebase.auth().currentUser._user;
     let { navigation } = props;
     
     navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_CONTACTS })
     this.ref = firebase.firestore().collection('contacts');
-
+    this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
-      uid,
       dataContacts:  new ListView.DataSource({
         rowHasChanged           : (row1, row2) => row1.id !== row2.id,
         sectionHeaderHasChanged : (s1, s2) => s1.title !== s2.title
@@ -65,7 +64,7 @@ class List extends Component {
   }
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress',this.setBack);
-    this.unsubscribe = this.ref.where('user', '==', this.state.uid).onSnapshot(this.onCollectionUpdate)
+    this.unsubscribe = this.ref.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdate)
   }
   onCollectionUpdate = (querySnapshot) => {
     let arrayChar = [...Array(26)].map((_, i) => (String.fromCharCode('A'.charCodeAt(0) + i)));
@@ -124,7 +123,7 @@ class List extends Component {
   render() {
     let { dataContacts, isLoading } = this.state;
     return (
-      isLoading ? <Text>Đang lấy dữ liệu</Text> :
+      isLoading ? <Loading/> :
       <ListView style= {{ marginRight: 10}}
         dataSource={dataContacts}
         renderRow={this.renderIndexItem}

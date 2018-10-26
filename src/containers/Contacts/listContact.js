@@ -3,7 +3,9 @@ import { ListItem, Left, Thumbnail, Body, Text, Button, Icon, Right } from 'nati
 import { BackHandler, ListView } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import Contacts from 'react-native-contacts';
-import { CATEGORY_FROMCONTACTS } from '@constants/title'
+import { CATEGORY_FROMCONTACTS } from '@constants/title';
+import Loading from '@components/Loading';
+
 class ListContact extends Component {
 
   constructor(props) {
@@ -41,7 +43,7 @@ class ListContact extends Component {
         lastName: e.familyName,
         name,
         id: e.recordID,
-        picture:  e.thumbnailPath,
+        picture: e.thumbnailPath,
         phone: e.phoneNumbers.map(e => e.number)
       })
     })
@@ -54,7 +56,7 @@ class ListContact extends Component {
     return true;
   }
   addContact = (item) => {
-    this.props.navigation.navigate('addContacts', {data: item})
+    this.props.navigation.navigate('addContacts', { data: item })
   }
   renderLeftHeader = () => {
     return (
@@ -66,9 +68,8 @@ class ListContact extends Component {
   componentDidMount() {
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
 
-    Contacts.getContactsMatchingString("", (err, dataContacts) => {
+    Contacts.getAll((err, dataContacts) => {
       if (err) throw err;
-      // this.setState({dataContacts})
       this.setContact(dataContacts)
     })
   }
@@ -90,16 +91,19 @@ class ListContact extends Component {
   }
   renderIndexItem = (item, sectionID, index) => {
     if (index === "0") return null;
-    console.log(item.id === this.state.key)
     return (
-      <ListItem noIndent button onPress={ () => this.addContact(item)}>
+      <ListItem noIndent>
         <Left style={{ flex: 1 }}>
+
           <Thumbnail square source={!!item.picture ? { uri: item.picture }: require('@thumbnails/category/default-contact.png')} />
         </Left>
         <Body style={{ flex: 4 }}>
           <Text>{item.name}</Text>
           {item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele}</Text>)}
         </Body>
+        <Button transparent onPress={() => this.addContact(item)}>
+            <Icon name='arrow-forward' />
+          </Button>
       </ListItem>
     )
   }
@@ -107,7 +111,7 @@ class ListContact extends Component {
   render() {
     let { dataContacts, isLoading } = this.state;
     return (
-      isLoading ? <Text>Đang lấy dữ liệu</Text> :
+      isLoading ? <Loading /> :
         <ListView style={{ marginRight: 10 }}
           dataSource={dataContacts}
           renderRow={this.renderIndexItem}

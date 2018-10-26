@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 
-import {View, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
-import { CATEGORY_CONTACTS, CATEGORY_TYPES } from '@constants/title'
+import {Content, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base';
+import { 
+  CATEGORY_CONTACTS, 
+  CATEGORY_TYPES, 
+  CATEGORY_MEASURES } from '@constants/title'
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 
@@ -18,13 +21,15 @@ class List extends Component {
   render() {
     let menu = [
       { navigate: 'contacts', thumbnails: require('@thumbnails/category/Contacts.png'), title: CATEGORY_CONTACTS },
-      { navigate: 'types', thumbnails: require('@thumbnails/category/Contacts.png'), title: CATEGORY_TYPES },
+      { navigate: 'types', thumbnails: require('@thumbnails/category/Categories.png'), title: CATEGORY_TYPES },
+      { navigate: 'measures', thumbnails: require('@thumbnails/category/TapeMeasures.png'), title: CATEGORY_MEASURES },
     ]
      return (
-      <View>
-        <Card>
+      <Content padder>
+        
           {menu.map( (e, key) =>
-            <CardItem key={key} button 
+          <Card key={key}>
+            <CardItem  button 
             onPress={()=> this.props.navigation.navigate( e.navigate, { preRoute: 'list' }) }
             >
               <Left>
@@ -34,12 +39,9 @@ class List extends Component {
                 </Body>
               </Left>
             </CardItem>
+          </Card>
           )}
-
-        </Card>
-          
-
-      </View>
+      </Content>
     )
   }
 }
