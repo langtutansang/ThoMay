@@ -26,7 +26,7 @@ class FooterComponent extends Component {
       name: TITLE_PRODUCT,
       icon: "grid",
       badge: 0,
-      router: 'home'
+      router: 'products'
 
     },
     {

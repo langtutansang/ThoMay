@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 
-import { Body, Right, Content, Text, Icon, Button, List, ListItem } from 'native-base';
+import { Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 import { CATEGORY_MEASURES } from '@constants/title'
 import firebase from 'react-native-firebase';
 import Loading from '@components/Loading';
+import IconFA from 'react-native-vector-icons/FontAwesome';
 
 class Measures extends Component {
   constructor(props) {
     super(props);
     let { navigation } = props;
-    navigation.setParams({ left: this.renderLeftHeader(), title: CATEGORY_MEASURES })
-    this.ref = firebase.firestore().collection('types');
+    navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_MEASURES })
+    this.ref = firebase.firestore().collection('measures');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
-      isLoading: true
+      isLoading: true,
+      isAdd: false,
+      title: '',
+      keyEdit: -1,
+      titleEdit: null,
     }
   }
   setBack = () => {
@@ -33,7 +38,13 @@ class Measures extends Component {
         <Icon name='arrow-back' />
       </Button>)
   }
-
+  renderRightHeader = () => {
+    return (
+      <Button transparent onPress={() => this.setState({ isAdd: true })}>
+        <Icon name='ios-add-circle' />
+      </Button>
+    )
+  }
   componentDidMount() {
     this.unsubscribe = this.ref.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdate)
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
@@ -48,43 +59,74 @@ class Measures extends Component {
     querySnapshot.forEach((e) => {
       dataTypes.push({ ...e.data(), id: e.id });
     });
+    this.setState({ dataTypes, isLoading: false })
+  }
 
-    let data = [];
-    sortArray = (sort) => {
-      data = [...data, {...sort}];
-      dataTypes.filter(e => e.parent === sort.id).map( e=>{
-        sortArray(e);
-      })
-    }
-    dataTypes.filter(e=> e.parent === "").forEach(
-      e=> {
-        sortArray(e)
-      }
-    )
-    this.setState({ dataTypes: data, isLoading: false })
+  addMeasure = () => {
+    this.ref.add({ title: this.state.title, user: this.uid })
+      .then(() => this.setState({ title: '' }))
+  }
+  editMeasure = (id) => {
+    this.ref.doc(id).update({title: this.state.titleEdit}).then( ()=> this.setState({keyEdit: -1}))
   }
   render() {
-    let { isLoading, dataTypes } = this.state;
+    let { isLoading, isAdd, dataTypes, title, titleEdit, keyEdit } = this.state;
 
     return (
       isLoading ? <Loading /> :
         <Content padder>
+          {isAdd && <Card>
+            <CardItem>
+              <Item>
+                <Label>Tên:</Label>
+                <Input value={title} onChangeText={e => this.setState({ title: e })} />
+              </Item>
+            </CardItem>
+            <CardItem style={{ marginLeft: 'auto' }}>
+              <Button success onPress={this.addMeasure} style={{ marginRight: 5 }}>
+                <Text>Lưu</Text>
+              </Button>
+              <Button warning onPress={() => this.setState({ isAdd: false, title: "" })}>
+                <Text>Đóng</Text>
+              </Button>
+            </CardItem>
+          </Card>
+          }
           <List>
-            {dataTypes.map((e, key) =>
-              <ListItem key={key}>
-                <Body>
-                  <Text>{e.title}</Text>
-                </Body>
-                <Right>
-                  <Button transparent onPress={this.setBack}>
-                    <Icon name='arrow-forward' />
-                  </Button>
-                </Right>
-              </ListItem>
+            {dataTypes.map((e, key) => 
+              keyEdit === key
+                ?
+                <ListItem key={key}>
+                  <Body>
+                    <Item>
+                      <Label>Tên:</Label>
+
+                      <Input
+                        value={titleEdit === null ? e.title : titleEdit}
+                        onChangeText={e => this.setState({ titleEdit: e })} />
+                    </Item>
+                  </Body>
+                    <Button style={{ marginRight: 20 }} transparent onPress={() => this.editMeasure(e.id)}>
+                      <IconFA name='floppy-o' size={25} />
+                    </Button>
+                    <Button transparent onPress={() => this.setState({ keyEdit: -1 })}>
+                      <IconFA name='times' size={25} />
+                    </Button>
+                </ListItem>
+                : <ListItem key={key}>
+                  <Body>
+                    <Text>{e.title}</Text>
+                  </Body>
+                  <Right>
+                    <Button transparent onPress={() => this.setState({ keyEdit: key })}>
+                      <IconFA name='pencil-square-o' size={25} />
+                    </Button>
+                  </Right>
+                </ListItem>
+              
             )}
           </List>
         </Content>
-
     )
   }
 }
