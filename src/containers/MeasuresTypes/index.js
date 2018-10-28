@@ -3,16 +3,16 @@ import React, { Component } from 'react';
 import { Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
-import { CATEGORY_MEASURES } from '@constants/title'
+import { CATEGORY_MEASURES_TYPES } from '@constants/title'
 import firebase from 'react-native-firebase';
 import Loading from '@components/Loading';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 
-class Measures extends Component {
+class MeasuresTypes extends Component {
   constructor(props) {
     super(props);
     let { navigation } = props;
-    navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_MEASURES })
+    navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_MEASURES_TYPES })
     this.ref = firebase.firestore().collection('measures');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
@@ -130,4 +130,4 @@ class Measures extends Component {
     )
   }
 }
-export default withNavigation(Measures);
+export default withNavigation(MeasuresTypes);
