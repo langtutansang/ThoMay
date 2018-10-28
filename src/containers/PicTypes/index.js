@@ -1,36 +1,47 @@
 import React, { Component } from 'react';
 
-import { Accordion, H3, Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label } from 'native-base';
+import { CheckBox, Accordion, H3, Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label, View, Thumbnail } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import { BackHandler } from 'react-native';
-import { CATEGORY_MEASURES_GROUPS } from '@constants/title'
+import { BackHandler, Image, Modal, TouchableOpacity} from 'react-native';
+import { CATEGORY_PICTYPES } from '@constants/title'
 import firebase from 'react-native-firebase';
 import Loading from '@components/Loading';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import ImageViewer from 'react-native-image-zoom-viewer';
 class PicTypes extends Component {
   constructor(props) {
     super(props);
     let { navigation } = props;
-    navigation.setParams({ left: this.renderLeftHeader(), title: CATEGORY_MEASURES_GROUPS })
+    navigation.setParams({ 
+      left: this.renderLeftHeader(), 
+      title: CATEGORY_PICTYPES,
+     })
     this.refTypes = firebase.firestore().collection('types');
-    this.refMeaGroups = firebase.firestore().collection('measuresGroups');
+    this.refPicTypes = firebase.firestore().collection('picTypes');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
       isLoadingTypes: true,
-      isLoadingMeaGroups: true,
-      dataMeaTypes: [],
-      dataMeaGroups: []
+      isLoadingPicTypes: true,
+      dataTypes: [],
+      dataPicTypes: [],
+      addPicTypes: [],
+      delPicTypes: [],
+      openModal: false
     }
   }
 
   setBack = () => {
-    this.props.navigation.navigate('list')
+    this.props.navigation.goBack();
     return true;
   }
 
   addMeasureGroups = (id) => {
-    this.props.navigation.navigate('addMeasuresGroups', { preList: 'types', id })
+    ImagePicker.openPicker({
+      multiple: true
+    }).then(image => {
+      this.setState({addPicTypes: image})
+    });
 
   }
 
@@ -43,13 +54,13 @@ class PicTypes extends Component {
 
   componentDidMount() {
     this.unsubscribeTypes = this.refTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdateTypes)
-    this.unsubscribeMeaGroups = this.refMeaGroups.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdateMeaGroups)    
+    this.unsubscribePicTypes = this.refPicTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdatePicTypes)    
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
   }
 
   componentWillUnmount() {
     this.unsubscribeTypes();
-    this.unsubscribeMeaGroups();
+    this.unsubscribePicTypes();
     BackHandler.removeEventListener('hardwareBackPress', this.setBack);
   }
 
@@ -61,23 +72,43 @@ class PicTypes extends Component {
     this.setState({ dataTypes, isLoadingTypes: false })
   }
 
-  onCollectionUpdateMeaGroups = (querySnapshot) => {
-    let dataMeaGroups = [];
+  onCollectionUpdatePicTypes = (querySnapshot) => {
+    let dataPicTypes = [];
     querySnapshot.forEach((e) => {
-      dataMeaGroups.push({ ...e.data(), id: e.id });
+      dataPicTypes.push({ ...e.data(), id: e.id });
     });
-    this.setState({ dataMeaGroups, isLoadingMeaGroups: false })
+    this.setState({ dataPicTypes, isLoadingPicTypes: false })
   }
 
-  renderContent = ({ content, id, des }) => (
+  renderContent = ({ id }) => (
     <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
-      <List style={{marginBottom: 5}}>
-      {this.state.dataMeaGroups.filter( e=> e.types === id).map( (e,key) => 
-          <ListItem key={key}>
-              <Text>{ e.title }</Text>
-          </ListItem>
-      )}
-      </List>
+        <Modal 
+          visible={this.state.openModal} 
+          transparent={true} 
+          onRequestClose={()=> this.setState({openModal: false})}
+          animationType="fade">
+            <ImageViewer 
+              imageUrls={this.state.addPicTypes.map(e => ({url: e.path}) )}
+            />
+        </Modal>
+
+      <View style={{marginBottom: 5, display: 'flex', flexWrap: 'wrap', flexDirection: 'row', justifyContent : 'flex-start' }}>
+        {this.state.addPicTypes.map( (item, key) =>  
+          <TouchableOpacity
+            style={{ margin: 2, position: 'relative'}}
+            key={key}
+            onPress={()=> this.setState({openModal: true}) }  
+            >
+          <Image 
+            style={{height: 75, width: 75}} 
+             
+            source={{ uri: item.path }}
+            />
+            <CheckBox checked={true} style={{ position: 'absolute', left: 0, top: 0}}/>
+          </TouchableOpacity>  
+          
+        )}
+      </View>
       <Button onPress={() => this.addMeasureGroups(id) } style={{ marginLeft: 'auto', backgroundColor: '#95aed6' }}>
         <Text>Chỉnh sửa</Text>
       </Button>
@@ -96,21 +127,19 @@ class PicTypes extends Component {
         }}
       >
         <Body><H3 style={{ fontWeight: "400" }}>{title}</H3></Body>
-
         <Right>
           {expanded
             ? <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-down" />
             : <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-forward" />}
         </Right>
-
       </CardItem>
     );
   }
 
   render() {
-    let { isLoadingMeaGroups, isLoadingTypes, dataTypes } = this.state;
+    let { isLoadingPicTypes, isLoadingTypes, dataTypes } = this.state;
     return (
-      (isLoadingMeaGroups || isLoadingTypes) ? <Loading /> :
+      (isLoadingPicTypes || isLoadingTypes) ? <Loading /> :
         <Content padder>
            <Accordion
             style={{borderWidth: 0}}
@@ -122,4 +151,5 @@ class PicTypes extends Component {
     )
   }
 }
+
 export default withNavigation(PicTypes);

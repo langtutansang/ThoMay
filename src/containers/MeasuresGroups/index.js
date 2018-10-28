@@ -19,7 +19,7 @@ class MeasuresGroups extends Component {
     this.state = {
       isLoadingTypes: true,
       isLoadingMeaGroups: true,
-      dataMeaTypes: [],
+      dataTypes: [],
       dataMeaGroups: []
     }
   }
