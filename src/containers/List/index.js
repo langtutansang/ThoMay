@@ -4,7 +4,10 @@ import {Content, Card, CardItem, Left, Thumbnail, Body, Text } from 'native-base
 import { 
   CATEGORY_CONTACTS, 
   CATEGORY_TYPES, 
-  CATEGORY_MEASURES_TYPES } from '@constants/title'
+  CATEGORY_MEASURES_TYPES,
+  CATEGORY_MEASURES_GROUPS,
+  CATEGORY_PICTYPES
+ } from '@constants/title'
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 
@@ -23,6 +26,8 @@ class List extends Component {
       { navigate: 'contacts', thumbnails: require('@thumbnails/category/Contacts.png'), title: CATEGORY_CONTACTS },
       { navigate: 'types', thumbnails: require('@thumbnails/category/Categories.png'), title: CATEGORY_TYPES },
       { navigate: 'measuresTypes', thumbnails: require('@thumbnails/category/TapeMeasures.png'), title: CATEGORY_MEASURES_TYPES },
+      { navigate: 'measuresGroups', thumbnails: require('@thumbnails/category/groups.png'), title: CATEGORY_MEASURES_GROUPS },
+      { navigate: 'picTypes', thumbnails: require('@thumbnails/category/picTypes.png'), title: CATEGORY_PICTYPES },
     ]
      return (
       <Content padder>

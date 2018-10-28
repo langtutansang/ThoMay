@@ -13,7 +13,7 @@ class MeasuresTypes extends Component {
     super(props);
     let { navigation } = props;
     navigation.setParams({ left: this.renderLeftHeader(), right: this.renderRightHeader(), title: CATEGORY_MEASURES_TYPES })
-    this.ref = firebase.firestore().collection('measures');
+    this.ref = firebase.firestore().collection('measuresTypes');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
       isLoading: true,
@@ -67,7 +67,7 @@ class MeasuresTypes extends Component {
       .then(() => this.setState({ title: '' }))
   }
   editMeasure = (id) => {
-    this.ref.doc(id).update({title: this.state.titleEdit}).then( ()=> this.setState({keyEdit: -1}))
+    this.ref.doc(id).update({title: this.state.titleEdit}).then( ()=> this.setState({ keyEdit: -1, titleEdit: null }))
   }
   render() {
     let { isLoading, isAdd, dataTypes, title, titleEdit, keyEdit } = this.state;
@@ -109,7 +109,7 @@ class MeasuresTypes extends Component {
                     <Button style={{ marginRight: 20 }} transparent onPress={() => this.editMeasure(e.id)}>
                       <IconFA name='floppy-o' size={25} />
                     </Button>
-                    <Button transparent onPress={() => this.setState({ keyEdit: -1 })}>
+                    <Button transparent onPress={() => this.setState({ keyEdit: -1, titleEdit: null })}>
                       <IconFA name='times' size={25} />
                     </Button>
                 </ListItem>
@@ -118,7 +118,7 @@ class MeasuresTypes extends Component {
                     <Text>{e.title}</Text>
                   </Body>
                   <Right>
-                    <Button transparent onPress={() => this.setState({ keyEdit: key })}>
+                    <Button transparent onPress={() => this.setState({ keyEdit: key, titleEdit: null })}>
                       <IconFA name='pencil-square-o' size={25} />
                     </Button>
                   </Right>

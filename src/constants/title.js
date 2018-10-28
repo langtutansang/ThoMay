@@ -10,4 +10,7 @@ export const CATEGORY_ADDCONTACTS = 'Thêm mới';
 export const CATEGORY_TYPES = 'Loại đồ';
 export const CATEGORY_ADDTYPES = 'Thêm loại đồ';
 export const CATEGORY_MEASURES_TYPES = 'Loại số đo';
+export const CATEGORY_MEASURES_GROUPS = 'Số đo từng loại đồ';
+export const CATEGORY_MEASURES_GROUPS_ADD = 'Thêm số đo';
+export const CATEGORY_PICTYPES = 'Hình ảnh từng loại';
 

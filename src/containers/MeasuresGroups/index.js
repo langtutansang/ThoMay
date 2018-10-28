@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label } from 'native-base';
+import { Accordion, H3, Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label } from 'native-base';
 import { withNavigation } from 'react-navigation';
 import { BackHandler } from 'react-native';
 import { CATEGORY_MEASURES_GROUPS } from '@constants/title'
@@ -17,7 +17,8 @@ class MeasuresGroups extends Component {
     this.refMeaGroups = firebase.firestore().collection('measuresGroups');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
-      isLoading: true,
+      isLoadingTypes: true,
+      isLoadingMeaGroups: true,
       dataMeaTypes: [],
       dataMeaGroups: []
     }
@@ -28,8 +29,8 @@ class MeasuresGroups extends Component {
     return true;
   }
 
-  addTypes = () => {
-    this.props.navigation.navigate('addTypes', { preList: 'types' })
+  addMeasureGroups = (id) => {
+    this.props.navigation.navigate('addMeasuresGroups', { preList: 'types', id })
 
   }
 
@@ -57,7 +58,7 @@ class MeasuresGroups extends Component {
     querySnapshot.forEach((e) => {
       dataTypes.push({ ...e.data(), id: e.id });
     });
-    this.setState({ dataTypes, isLoading: false })
+    this.setState({ dataTypes, isLoadingTypes: false })
   }
 
   onCollectionUpdateMeaGroups = (querySnapshot) => {
@@ -65,34 +66,58 @@ class MeasuresGroups extends Component {
     querySnapshot.forEach((e) => {
       dataMeaGroups.push({ ...e.data(), id: e.id });
     });
-    this.setState({ dataMeaGroups, isLoading: false })
+    this.setState({ dataMeaGroups, isLoadingMeaGroups: false })
   }
-  
-  render() {
-    let { isLoading, dataTypes } = this.state;
-    return (
-      isLoading ? <Loading /> :
-        <Content padder>
-          <List>
-            {dataTypes.map((e, key) =>
-              <ListItem key={key}>
-                <Body>
-                  <Item>
-                    <Label>Tên:</Label>
 
-                    <Input
-                      value={titleEdit === null ? e.title : titleEdit}
-                      onChangeText={e => this.setState({ titleEdit: e })} />
-                  </Item>
-                </Body>
-                <Right>
-                  <Button transparent onPress={() => this.setState({ keyEdit: key })}>
-                    <IconFA name='pencil-square-o' size={25} />
-                  </Button>
-                </Right>
-              </ListItem>
-            )}
-          </List>
+  renderContent = ({ content, id, des }) => (
+    <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
+      <List style={{marginBottom: 5}}>
+      {this.state.dataMeaGroups.filter( e=> e.types === id).map( (e,key) => 
+          <ListItem key={key}>
+              <Text>{ e.title }</Text>
+          </ListItem>
+      )}
+      </List>
+      <Button onPress={() => this.addMeasureGroups(id) } style={{ marginLeft: 'auto', backgroundColor: '#95aed6' }}>
+        <Text>Chỉnh sửa</Text>
+      </Button>
+    </Content>
+  )
+
+  renderHeader({ title }, expanded) {
+    return (
+      <CardItem header
+        style={{
+          backgroundColor: expanded ? '#95aed6' : null,
+          borderRadius: 0,
+          borderColor: expanded ? '#95aed6' : '#d3d3d3',
+          borderBottomWidth: 1,
+          marginTop: 5
+        }}
+      >
+        <Body><H3 style={{ fontWeight: "400" }}>{title}</H3></Body>
+
+        <Right>
+          {expanded
+            ? <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-down" />
+            : <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-forward" />}
+        </Right>
+
+      </CardItem>
+    );
+  }
+
+  render() {
+    let { isLoadingMeaGroups, isLoadingTypes, dataTypes } = this.state;
+    return (
+      (isLoadingMeaGroups || isLoadingTypes) ? <Loading /> :
+        <Content padder>
+           <Accordion
+            style={{borderWidth: 0}}
+            dataArray={dataTypes}
+            renderHeader={this.renderHeader}
+            renderContent={this.renderContent}
+          />
         </Content>
     )
   }
