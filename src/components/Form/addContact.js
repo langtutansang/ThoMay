@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Content, Item, Input, Button, Text, Thumbnail, Label, Card, CardItem, View, Left, Body, Toast } from 'native-base';
 import * as Progress from 'react-native-progress';
 import ImagePicker from 'react-native-image-crop-picker';
+import { Image, TouchableOpacity } from 'react-native'
 class AddContactForm extends Component {
   imageDefault = require('@thumbnails/category/Contacts.png')
 
@@ -20,8 +21,8 @@ class AddContactForm extends Component {
   }
   getPic = () => {
     ImagePicker.openPicker({
-      width: 150,
-      height: 150,
+      width: 130,
+      height: 130,
       cropping: true
     }).then(image => {
       this.setState({
@@ -32,9 +33,9 @@ class AddContactForm extends Component {
   saveInfo = () => {
 
     let { form } = this.state;
-    if( (form.firstName!=="" || form.lastName !=="")&& form.phone[0]!=="" )
-    this.props.saveContact(form);
-    else  Toast.show({
+    if ((form.firstName !== "" || form.lastName !== "") && form.phone[0] !== "")
+      this.props.saveContact(form);
+    else Toast.show({
       text: "Cần nhập thông tin",
       position: "top"
     })
@@ -54,16 +55,14 @@ class AddContactForm extends Component {
   }
   render() {
     let { firstName, lastName, phone, address, picture, email, zalo, fb } = this.state.form;
-    let { isLoading } = this.props;
+    let { isLoading, percent } = this.props;
     return (
       <Content padder>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <Left style={{ flex: 0.4 }}>
-            <Card>
-              <CardItem button onPress={this.getPic}>
-                <Thumbnail square large source={!!picture ? { uri: picture } : this.imageDefault} />
-              </CardItem>
-            </Card>
+            <TouchableOpacity onPress={this.getPic}>
+              <Image style={{ height: 130, width: 130, borderRadius: 2, borderWidth: 3, borderColor: '#95aed6' }} source={!!picture ? { uri: picture } : this.imageDefault} />
+            </TouchableOpacity>
           </Left>
           <Body style={{ flex: 0.6 }}>
             <Item floatingLabel >
@@ -101,7 +100,11 @@ class AddContactForm extends Component {
           <Button block success onPress={this.saveInfo} style={{ marginTop: 15 }}>
             <Text>Lưu thông tin</Text>
           </Button>
-          : <Progress.Bar indeterminate={true} animated={true} height={38} color="#5cb85c" width={null} />
+          :
+          <View style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            <Text style={{ position: 'absolute', width: '100%', textAlign: 'center' }}>{parseInt(percent * 100, 10)} %</Text>
+            <Progress.Bar height={38} color="#5cb85c" width={null} progress={percent} />
+          </View>
         }
       </Content>
     )

@@ -2,32 +2,37 @@ import React, { Component } from 'react';
 
 import { CheckBox, Accordion, H3, Body, Right, Content, Text, Icon, Button, List, ListItem, Card, CardItem, Item, Input, Label, View, Thumbnail } from 'native-base';
 import { withNavigation } from 'react-navigation';
-import { BackHandler, Image, Modal, TouchableOpacity} from 'react-native';
+import { BackHandler, Image, Modal, TouchableOpacity } from 'react-native';
 import { CATEGORY_PICTYPES } from '@constants/title'
 import firebase from 'react-native-firebase';
 import Loading from '@components/Loading';
 import IconFA from 'react-native-vector-icons/FontAwesome';
 import ImagePicker from 'react-native-image-crop-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import uuid from 'uuid/v4';
+import * as Progress from 'react-native-progress';
+
 class PicTypes extends Component {
   constructor(props) {
     super(props);
     let { navigation } = props;
-    navigation.setParams({ 
-      left: this.renderLeftHeader(), 
+    navigation.setParams({
+      left: this.renderLeftHeader(),
       title: CATEGORY_PICTYPES,
-     })
+    })
     this.refTypes = firebase.firestore().collection('types');
     this.refPicTypes = firebase.firestore().collection('picTypes');
+    this.refStoragePicTypes = firebase.storage().ref('picTypes');
     this.uid = firebase.auth().currentUser._user.uid;
     this.state = {
       isLoadingTypes: true,
       isLoadingPicTypes: true,
       dataTypes: [],
       dataPicTypes: [],
-      addPicTypes: [],
       delPicTypes: [],
-      openModal: false
+      openModal: false,
+      percentUpload: 0,
+      showPie: false
     }
   }
 
@@ -35,12 +40,34 @@ class PicTypes extends Component {
     this.props.navigation.goBack();
     return true;
   }
-
-  addMeasureGroups = (id) => {
+  uploadPic = (image, id, num) => {
+    const unsubscribe = this.refStoragePicTypes.child(uuid()).put(image[num]).on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        let percentUpload = (snapshot.bytesTransferred / snapshot.totalBytes + num) / image.length;
+        this.setState({ percentUpload })
+        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+          unsubscribe();
+          this.refPicTypes.add({
+            user: this.uid,
+            picture: snapshot.downloadURL,
+            types: id
+          })
+          if (num + 1 < image.length) this.uploadPic(image, id, num + 1);
+          else this.setState({ percentUpload: 0, showPie: false })
+        }
+      },
+      () => {
+        unsubscribe();
+      },
+    );
+  }
+  addPic = (id) => {
     ImagePicker.openPicker({
       multiple: true
     }).then(image => {
-      this.setState({addPicTypes: image})
+      image = image.map(e => (e.path));
+      this.setState({ showPie: true }, () => this.uploadPic(image, id, 0))
     });
 
   }
@@ -54,7 +81,7 @@ class PicTypes extends Component {
 
   componentDidMount() {
     this.unsubscribeTypes = this.refTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdateTypes)
-    this.unsubscribePicTypes = this.refPicTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdatePicTypes)    
+    this.unsubscribePicTypes = this.refPicTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdatePicTypes)
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
   }
 
@@ -82,40 +109,44 @@ class PicTypes extends Component {
 
   renderContent = ({ id }) => (
     <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
-        <Modal 
-          visible={this.state.openModal} 
-          transparent={true} 
-          onRequestClose={()=> this.setState({openModal: false})}
-          animationType="fade">
-            <ImageViewer 
-              imageUrls={this.state.addPicTypes.map(e => ({url: e.path}) )}
-            />
-        </Modal>
-
-      <View style={{marginBottom: 5, display: 'flex', flexWrap: 'wrap', flexDirection: 'row', justifyContent : 'flex-start' }}>
-        {this.state.addPicTypes.map( (item, key) =>  
+      {this.state.showPie &&
+        <Progress.Bar color="#5cb85c" width={null} progress={this.state.percentUpload} />
+      }
+      {this.state.openModal ?<Modal
+        visible={true}
+        transparent={true}
+        onRequestClose={() => this.setState({ openModal: false })}
+        animationType="fade">
+        <ImageViewer
+          imageUrls={this.state.dataPicTypes.filter(e => e.types === id).map(e => ({ url: e.picture }))}
+        />
+      </Modal>
+      :
+      <View style={{ marginBottom: 5, display: 'flex', flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'flex-start' }}>
+        {this.state.dataPicTypes.filter(e => e.types === id).map((item, key) =>
           <TouchableOpacity
-            style={{ margin: 2, position: 'relative'}}
+            style={{ margin: 2, position: 'relative' }}
             key={key}
-            onPress={()=> this.setState({openModal: true}) }  
-            >
-          <Image 
-            style={{height: 75, width: 75}} 
-             
-            source={{ uri: item.path }}
+            onPress={() => this.setState({ openModal: true })}
+          >
+            <Image
+              style={{ height: 75, width: 75 }}
+              source={{ uri: item.picture }}
             />
-            <CheckBox checked={true} style={{ position: 'absolute', left: 0, top: 0}}/>
-          </TouchableOpacity>  
-          
+            {/* <TouchableOpacity 
+              onPress={()=> this.setState({ addPicTypes: this.state.addPicTypes.filter( (ele, keyEle ) =>  keyEle !== key ) }) }
+              style={{ position: 'absolute', right: 0, top: 0}}>
+              <IconFA name='times' size={20} style={{color: 'red'}}/>
+            </TouchableOpacity> */}
+          </TouchableOpacity>
+
         )}
       </View>
-      <Button onPress={() => this.addMeasureGroups(id) } style={{ marginLeft: 'auto', backgroundColor: '#95aed6' }}>
-        <Text>Chỉnh sửa</Text>
-      </Button>
+      }
     </Content>
   )
 
-  renderHeader({ title }, expanded) {
+  renderHeader = ({ title, id }, expanded)  =>{
     return (
       <CardItem header
         style={{
@@ -129,7 +160,10 @@ class PicTypes extends Component {
         <Body><H3 style={{ fontWeight: "400" }}>{title}</H3></Body>
         <Right>
           {expanded
-            ? <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-down" />
+            ?
+            <TouchableOpacity onPress={() => this.addPic(id)}>
+              <Text style={{ color: 'blue' }}>Up ảnh</Text>
+            </TouchableOpacity>
             : <Icon style={{ fontSize: 18, color: '#d3d3d3' }} name="arrow-forward" />}
         </Right>
       </CardItem>
@@ -141,8 +175,8 @@ class PicTypes extends Component {
     return (
       (isLoadingPicTypes || isLoadingTypes) ? <Loading /> :
         <Content padder>
-           <Accordion
-            style={{borderWidth: 0}}
+          <Accordion
+            style={{ borderWidth: 0 }}
             dataArray={dataTypes}
             renderHeader={this.renderHeader}
             renderContent={this.renderContent}
