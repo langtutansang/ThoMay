@@ -17,7 +17,11 @@ import {
   MeasuresGroups,
   AddMeasuresGroups,
   PicTypes,
-  Products } from '@containers'
+  Products,
+  Order,
+  MeasureCustomer,
+  AddMeasureCustomer
+  } from '@containers'
 
 const Screen = (Child ) => (<Content><Child/></Content>)
 
@@ -38,6 +42,10 @@ const scenes = createStackNavigator( {
   addMeasuresGroups: ()=>Screen(AddMeasuresGroups),
   picTypes: ()=>Screen(PicTypes),
   products: ()=>Screen(Products),
+  order: ()=>Screen(Order),
+  measureCustomer: ()=>Screen(MeasureCustomer),
+  addMeasureCustomer: ()=>Screen(AddMeasureCustomer),
+  
 },
 {
   headerMode: 'none',

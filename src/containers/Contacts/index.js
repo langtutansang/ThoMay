@@ -3,10 +3,9 @@ import { BackHandler, ListView } from 'react-native';
 import firebase from 'react-native-firebase';
 import { Text, Button, Icon, ActionSheet, ListItem, Left, Body, Thumbnail } from 'native-base';
 import { withNavigation  } from 'react-navigation';
-import { CANCEL_INDEX, DESTRUCTIVE_INDEX } from '@constants/other'
 import { CATEGORY_CONTACTS } from '@constants/title'
 import Loading from '@components/Loading';
-
+import ListContacts from '@components/View/listContact'
 class List extends Component {
 
   constructor(props) {
@@ -28,17 +27,16 @@ class List extends Component {
   showMenuContact = () => {
     var BUTTONS = [
       { text: 'Tạo mới', screen: () => this.props.navigation.navigate('addContacts',{ preRoute: 'list' }) },
-      { text: 'Lấy từ danh bạ', screen: () => this.props.navigation.navigate('listContacts',{ preRoute: 'list' })} 
+      { text: 'Lấy từ danh bạ', screen: () => this.props.navigation.navigate('listContacts',{ preRoute: 'list' })} ,
     ];
     ActionSheet.show(
       {
         options: BUTTONS,
-        cancelButtonIndex: CANCEL_INDEX,
-        destructiveButtonIndex: DESTRUCTIVE_INDEX,
+        cancelButtonIndex: 2,
         title: "Chọn từ"
       },
       key =>{
-        if( !!BUTTONS[key]) BUTTONS[key].screen()
+        if( !!BUTTONS[key] && key!==2) BUTTONS[key].screen()
       } 
     )
   }
@@ -59,7 +57,7 @@ class List extends Component {
   }
 
   setBack = () => {
-    this.props.navigation.navigate('list')
+    this.props.navigation.goBack();
     return true;
   }
   componentDidMount() {
@@ -94,41 +92,14 @@ class List extends Component {
     this.unsubscribe();
 
   }
-
-  renderSectionItem = (section) => {
-    return (
-      <ListItem itemDivider>
-        <Text>{section[0].title}</Text>
-      </ListItem> 
-    )
+  onPress = (id) => {
+    console.log(id)
   }
-  renderIndexItem = (item, sectionID, index) => {
-    if(index === "0") return null;
-    return(
-      <ListItem
-        button onPress={() => this.onPress(item.id)}
-        noIndent
-        >
-          <Left style={{ flex: 1 }}>
-            <Thumbnail square source={!!item.picture ? { uri: item.picture } : require('@thumbnails/category/default-contact.png')} />
-          </Left>
-          <Body style={{ flex: 4 }}>
-            <Text>{item.name}</Text>
-            { item.phone.length > 0 && item.phone.map((ele, keyele) => <Text key={keyele} note>{ele}</Text>)}
-          </Body>
-      </ListItem>
-    )
-  }
-  
   render() {
     let { dataContacts, isLoading } = this.state;
     return (
       isLoading ? <Loading/> :
-      <ListView style= {{ marginRight: 10}}
-        dataSource={dataContacts}
-        renderRow={this.renderIndexItem}
-        renderSectionHeader={this.renderSectionItem}
-      />
+      <ListContacts dataContacts={dataContacts} onPress={this.onPress} />
     )
   }
 }

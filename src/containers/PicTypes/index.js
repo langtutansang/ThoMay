@@ -11,7 +11,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import uuid from 'uuid/v4';
 import * as Progress from 'react-native-progress';
-
+import RNFS from 'react-native-fs';
 class PicTypes extends Component {
   constructor(props) {
     super(props);
@@ -41,16 +41,19 @@ class PicTypes extends Component {
     return true;
   }
   uploadPic = (image, id, num) => {
-    const unsubscribe = this.refStoragePicTypes.child(uuid()).put(image[num]).on(
+    let name = uuid()
+    const unsubscribe = this.refStoragePicTypes.child(name).put(image[num]).on(
       firebase.storage.TaskEvent.STATE_CHANGED,
       (snapshot) => {
         let percentUpload = (snapshot.bytesTransferred / snapshot.totalBytes + num) / image.length;
         this.setState({ percentUpload })
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
           unsubscribe();
+          RNFS.copyFile(image[num], `${RNFS.ExternalStorageDirectoryPath}/ThoMay/${name}`);
           this.refPicTypes.add({
             user: this.uid,
             picture: snapshot.downloadURL,
+            name,
             types: id
           })
           if (num + 1 < image.length) this.uploadPic(image, id, num + 1);
@@ -81,7 +84,7 @@ class PicTypes extends Component {
 
   componentDidMount() {
     this.unsubscribeTypes = this.refTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdateTypes)
-    this.unsubscribePicTypes = this.refPicTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdatePicTypes)
+    this.unsubscribePicTypes = this.refPicTypes.where('user', '==', this.uid).onSnapshot(this.onCollectionUpdatePicTypes )
     BackHandler.addEventListener('hardwareBackPress', this.setBack);
   }
 
@@ -100,13 +103,27 @@ class PicTypes extends Component {
   }
 
   onCollectionUpdatePicTypes = (querySnapshot) => {
-    let dataPicTypes = [];
+    
+    let dataPicTypes = [];  
     querySnapshot.forEach((e) => {
-      dataPicTypes.push({ ...e.data(), id: e.id });
+      let data = { ...e.data(), id: e.id };     
+      dataPicTypes.push(data);
     });
-    this.setState({ dataPicTypes, isLoadingPicTypes: false })
+    this.downLoadImg(dataPicTypes);
   }
+  downLoadImg = async ( dataPicTypes) =>  {
+    for(i = 0; i < dataPicTypes.length; i++){
+      let { name } = dataPicTypes[i];
+      let exist = await RNFS.exists(`${RNFS.ExternalStorageDirectoryPath}/ThoMay/${name}`);
+      if(!exist) {
+          await this.refStoragePicTypes.child(name)
+          .downloadFile(`${RNFS.ExternalStorageDirectoryPath}/ThoMay/${name}`)
+      }
+    }
 
+    this.setState({ dataPicTypes, isLoadingPicTypes: false })
+
+  }
   renderContent = ({ id }) => (
     <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
       {this.state.showPie &&
@@ -118,7 +135,7 @@ class PicTypes extends Component {
         onRequestClose={() => this.setState({ openModal: false })}
         animationType="fade">
         <ImageViewer
-          imageUrls={this.state.dataPicTypes.filter(e => e.types === id).map(e => ({ url: e.picture }))}
+          imageUrls={this.state.dataPicTypes.filter(e => e.types === id).map(e => ({ url: `file:///${RNFS.ExternalStorageDirectoryPath}/ThoMay/${e.name}` }))}
         />
       </Modal>
       :
@@ -131,13 +148,8 @@ class PicTypes extends Component {
           >
             <Image
               style={{ height: 75, width: 75 }}
-              source={{ uri: item.picture }}
+              source={{ uri: `file:///${RNFS.ExternalStorageDirectoryPath}/ThoMay/${item.name}`}}
             />
-            {/* <TouchableOpacity 
-              onPress={()=> this.setState({ addPicTypes: this.state.addPicTypes.filter( (ele, keyEle ) =>  keyEle !== key ) }) }
-              style={{ position: 'absolute', right: 0, top: 0}}>
-              <IconFA name='times' size={20} style={{color: 'red'}}/>
-            </TouchableOpacity> */}
           </TouchableOpacity>
 
         )}
