@@ -17,3 +17,6 @@ export const ORDER = 'Đặt may';
 export const CHOOSE_CUSTOMER = 'Chọn khách hàng';
 export const MEASURE_CUSTOMER = 'Chọn số đo';
 export const ADD_MEASURE_CUSTOMER = 'Thêm số đo';
+export const PIC_MEASURE_CUSTOMER = 'Chọn ảnh kiểu đồ';
+export const FINISH_ORDER = 'Hoàn tất đặt đồ';
+

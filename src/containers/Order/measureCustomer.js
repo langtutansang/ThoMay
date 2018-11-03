@@ -89,20 +89,21 @@ class MeasureCustomer extends Component {
     });
     this.setState({ dataTypes, dataTypesObject, isLoadingTypes: false })
   }
-  renderContent = ({ meaGroup }) => {
+  renderContent = ({ meaGroup, id }) => {
     meaGroup.reverse();
     return <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
       {meaGroup.map((ele, keyEle) =>
 
         <Card key={keyEle}>
-
-            <CardItem header>
-              <Text>{ele.time}</Text>
+            <CardItem
+              header 
+              button 
+              onPress={ () => this.props.navigation.navigate('picMeasureCustomer',{ idTypes: id, idContact: this.idContact, arrMes: ele.arr } )} >
+              <Body><Text>{ele.time}</Text></Body>
               <Right  style={{padding: 0}}>
                 <Icon name='arrow-forward' size={25} />
               </Right>
               </CardItem>
-
             <List style={{ width: '100%' }}>
               {ele.arr.map((e, key) =>
                 <ListItem key={key}>
@@ -141,14 +142,6 @@ class MeasureCustomer extends Component {
 
   render() {
     let { data, isLoading, isLoadingTypes } = this.state;
-    // let viewShow = null;
-    // if(!!data.measureCustomer){
-    //   Object.keys(data.measureCustomer).fillorEach()
-    // }
-    if (!!data.measureCustomer) {
-      let a = Object.keys(data.measureCustomer).map(e => ({ id: e, ...data.measureCustomer[e] }));
-      console.log(a);
-    }
     return (
       isLoading || isLoadingTypes ? <Loading /> :
         !!data.measureCustomer &&
@@ -158,8 +151,6 @@ class MeasureCustomer extends Component {
           renderHeader={this.renderHeader}
           renderContent={this.renderContent}
         />
-
-
     )
   }
 }
