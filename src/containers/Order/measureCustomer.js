@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { BackHandler } from 'react-native';
 import firebase from 'react-native-firebase';
-import { Text, Button, Icon, ActionSheet, Body, Right, H3, Content, Accordion, CardItem } from 'native-base';
+import { View, Text, Button, Icon, ActionSheet, Body, Right, H3, Content, Accordion, Card, CardItem, List, ListItem } from 'native-base';
 import { withNavigation } from 'react-navigation'
 import { MEASURE_CUSTOMER } from '@constants/title'
 import Loading from '@components/Loading';
 import IconFA from 'react-native-vector-icons/FontAwesome';
+import Swiper from 'react-native-swiper';
 
 class MeasureCustomer extends Component {
 
@@ -75,7 +76,7 @@ class MeasureCustomer extends Component {
 
   onCollectionUpdate = (querySnapshot) => {
     let { _data } = querySnapshot;
-    _data = { ..._data, measureCustomer: !!_data.measureCustomer ? JSON.parse(_data.measureCustomer) : {}}
+    _data = { ..._data, measureCustomer: !!_data.measureCustomer ? JSON.parse(_data.measureCustomer) : {} }
     this.setState({ data: _data, isLoading: false })
   }
 
@@ -88,10 +89,32 @@ class MeasureCustomer extends Component {
     });
     this.setState({ dataTypes, dataTypesObject, isLoadingTypes: false })
   }
-  renderContent = ({ content, id, des }) => (
-    <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
+  renderContent = ({ meaGroup }) => {
+    meaGroup.reverse();
+    return <Content padder style={{ borderWidth: 1, borderColor: '#95aed6' }}>
+      {meaGroup.map((ele, keyEle) =>
+
+        <Card key={keyEle}>
+
+            <CardItem header>
+              <Text>{ele.time}</Text>
+              <Right  style={{padding: 0}}>
+                <Icon name='arrow-forward' size={25} />
+              </Right>
+              </CardItem>
+
+            <List style={{ width: '100%' }}>
+              {ele.arr.map((e, key) =>
+                <ListItem key={key}>
+                  <Text>{`${e.title}: ${e.value || ""}`}</Text>
+                </ListItem>
+              )}
+            </List>
+        </Card>
+
+      )}
     </Content>
-  )
+  }
 
   renderHeader({ title }, expanded) {
     return (
@@ -122,18 +145,21 @@ class MeasureCustomer extends Component {
     // if(!!data.measureCustomer){
     //   Object.keys(data.measureCustomer).fillorEach()
     // }
+    if (!!data.measureCustomer) {
+      let a = Object.keys(data.measureCustomer).map(e => ({ id: e, ...data.measureCustomer[e] }));
+      console.log(a);
+    }
     return (
       isLoading || isLoadingTypes ? <Loading /> :
-        <Content>
-          {!!data.measureCustomer &&
-            <Accordion
-              style={{ borderWidth: 0 }}
-              dataArray={Object.keys(data.measureCustomer).map(e => ({ id: e, ...data.measureCustomer[e] }))}
-              renderHeader={this.renderHeader}
-              renderContent={this.renderContent}
-            />
-          }
-        </Content>
+        !!data.measureCustomer &&
+        <Accordion
+          style={{ borderWidth: 0 }}
+          dataArray={Object.keys(data.measureCustomer).map(e => ({ id: e, ...data.measureCustomer[e] }))}
+          renderHeader={this.renderHeader}
+          renderContent={this.renderContent}
+        />
+
+
     )
   }
 }

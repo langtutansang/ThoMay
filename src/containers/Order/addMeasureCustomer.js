@@ -6,7 +6,7 @@ import { withNavigation } from 'react-navigation';
 import { ADD_MEASURE_CUSTOMER } from '@constants/title'
 import Loading from '@components/Loading';
 import IconFA from 'react-native-vector-icons/FontAwesome';
-
+import moment from 'moment';
 class AddMeasureCustomer extends Component {
 
   constructor(props) {
@@ -79,10 +79,8 @@ class AddMeasureCustomer extends Component {
 
     let { data, dataMeaGroups, dataTypesObject } = this.state;
     let dataAdd = { ...data};
-    if( !dataAdd.measureCustomer[this.idTypes])
-      dataAdd.measureCustomer[this.idTypes] = {...dataTypesObject, meaGroup: []};
-    dataAdd.measureCustomer[this.idTypes].meaGroup.push(dataMeaGroups);
-    console.log(dataAdd);
+    dataAdd.measureCustomer[this.idTypes] = {...dataTypesObject, meaGroup: !dataAdd.measureCustomer[this.idTypes] ? [] : dataAdd.measureCustomer[this.idTypes].meaGroup};
+    dataAdd.measureCustomer[this.idTypes].meaGroup.push({arr: dataMeaGroups, time: moment().calendar()});
     this.refMeasureCustomer.update({...dataAdd, measureCustomer: JSON.stringify(dataAdd.measureCustomer) })
     .then(res => {
       this.props.navigation.navigate('home')
@@ -105,7 +103,7 @@ class AddMeasureCustomer extends Component {
           {dataMeaGroups.map( (e, key) => 
           <Item key={key}>
             <Label>{e.title}: </Label>
-            <Input value={e.value} onTextChange={ (e) => changeValue(e, key)}/>
+            <Input value={e.value} onChangeText={ (e) => this.changeValue(e, key)}/>
           </Item>)}
           <Button success onPress={this.save}>
             <Text>Lưu</Text>
